@@ -1,0 +1,752 @@
+import React, { useEffect, useState } from "react";
+import ExecutiveBoard from "../Components/ExecutiveBoard";
+import NewsSection from "../Components/NewsSection";
+import axioesInstance from "../utils/axioesInstance";
+
+import PlacesSection from "../Components/PlacesSection";
+import ContactSection from "../Components/ContactSection";
+import FooterSection from "../Components/FooterSection";
+
+// Executive members data for cards
+const executiveMembers = [
+  { name: "श्री. विकास कचरू शेटे", phone: "+91 9876543210", img: "https://randomuser.me/api/portraits/men/45.jpg" },
+  { name: "श्री. रमेश कुंडलिक पुंडे", phone: "+91 9123456789", img: "https://randomuser.me/api/portraits/men/46.jpg" },
+  { name: "श्री. खंडू भोमा मेंगाळ", phone: "+91 9988776655", img: "https://randomuser.me/api/portraits/men/47.jpg" },
+  { name: "श्रीमती. बेबीताई दत्तात्रय शेटे", phone: "+91 9876123456", img: "https://randomuser.me/api/portraits/women/48.jpg" },
+  { name: "श्रीमती. शैला मंगेश शेटे", phone: "+91 9123459876", img: "https://randomuser.me/api/portraits/women/49.jpg" },
+  { name: "श्रीमती. उज्वला साहेबराव घुले", phone: "+91 9988123456", img: "https://randomuser.me/api/portraits/women/50.jpg" },
+  { name: "श्रीमती. नानीबाई साहेबराव मेंगाळ", phone: "+91 9876543219", img: "https://randomuser.me/api/portraits/women/51.jpg" },
+];
+// src/Users/MainPage/MainPage.jsx
+// import React from "react"; // removed duplicate import
+
+const stats = [
+  { icon: "🌾", number: "2200", label: "हेक्टर क्षेत्रफळ" },
+  { icon: "🏘", number: "4", label: "वार्ड संख्या" },
+  { icon: "👥", number: "3,711", label: "एकूण लोकसंख्या" },
+  { icon: "🏠", number: "758", label: "कुटुंब संख्या" },
+];
+
+
+
+
+function useDevelopmentWorks() {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    axioesInstance.get("/devworks")
+      .then((res) => {
+   
+        setLoading(false);
+        return res.data;
+      })
+      .then((data) => {
+        setItems(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, []);
+  return { items, loading, error };
+}
+
+
+function DevelopmentSlideshow() {
+  const { items: developmentItems, loading, error } = useDevelopmentWorks();
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    if (!loading && developmentItems.length > 0) {
+      const timer = setTimeout(() => {
+        setCurrent((prev) => (prev + 1) % developmentItems.length);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [current, loading, developmentItems.length]);
+
+  const goPrev = () =>
+    setCurrent((prev) => (prev - 1 + developmentItems.length) % developmentItems.length);
+  const goNext = () =>
+    setCurrent((prev) => (prev + 1) % developmentItems.length);
+
+  if (loading) return <div className="w-full text-center py-10">विकास कामे लोड होत आहेत...</div>;
+  if (error) return <div className="w-full text-center py-10 ">विकास कामे उपलब्ध नाहीत.</div>;
+  if (!developmentItems.length) return <div className="w-full text-center py-10">विकास कामे उपलब्ध नाहीत.</div>;
+
+  const item = developmentItems[current];
+
+  return (
+    <div className="flex justify-center items-center w-full flex-grow">
+      <div className="bg-white rounded-xl shadow-lg flex flex-col items-center sm:p-3 animate-fadeUp w-full flex-grow mx-auto relative md:h-[30rem] h-[30rem] hover:shadow-2xl hover:-translate-y-1 transition">
+        
+        {/* Arrows */}
+        <button
+          onClick={goPrev}
+          className="absolute left-2 top-1/2 transform -translate-y-1/2 p-3 text-3xl text-green-700 hover:text-orange-500 bg-white rounded-full shadow-md z-10"
+        >
+          &#8592;
+        </button>
+        <button
+          onClick={goNext}
+          className="absolute right-2 top-1/2 transform -translate-y-1/2 p-3 text-3xl text-green-700 hover:text-orange-500 bg-white rounded-full shadow-md z-10"
+        >
+          &#8594;
+        </button>
+
+        {/* Image */}
+        <div className="w-full px-5 md:px-5 md:py-5 h-[60%] md:h-[70%] flex-shrink-0 flex flex-col justify-center items-center mb-0">
+          <img
+            src={item.image.url}
+            alt={item.title}
+            className="w-full h-full object-cover rounded"
+          />
+        </div>
+
+        {/* Content */}
+        <div className="w-full sm:py-5 h-[40%] md:h-[30%] flex flex-col justify-between items-center bg-white px-2">
+          <div className="flex flex-col items-center text-center">
+            <h5 className="text-lg font-bold mb-1 mt-5 break-words">
+              {item.title}
+            </h5>
+            <p className="mb-1 text-sm text-gray-700 break-words">
+              {item.description}
+            </p>
+          </div>
+
+          {/* Dots */}
+          <div className="flex gap-2 mt-2 sm:mt-1 mb-2 sm:mb-0">
+            {developmentItems.map((_, idx) => (
+              <span
+                key={idx}
+                className={`w-3 h-3 rounded-full ${
+                  idx === current ? "bg-green-600" : "bg-gray-300"
+                } inline-block`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+
+
+const sectionIds = [
+  "home",
+  "about",
+  "development",
+  "services",
+  "certificates",
+  "tax",
+  "members",
+  "officials",
+  "places",
+  "contact",
+];
+
+const MainPage = () => {
+  const [activeSection, setActiveSection] = useState("home");
+  // Mobile nav state
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [showQRModal, setShowQRModal] = useState("");
+  const [panipattiQR, setPanipattiQR] = useState(null);
+  const [gharPattiQR, setGharPattiQR] = useState(null);
+
+  // Custom hook to fetch development works from backend
+  useEffect(() => {
+    axioesInstance.get("/qr").then((response) => {
+      const data = response.data;
+      setPanipattiQR(data.gharPattiQR?.url);
+      setGharPattiQR(data.panipattiQR?.url);
+    })
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      let found = false;
+      for (let i = sectionIds.length - 1; i >= 0; i--) {
+        const section = document.getElementById(sectionIds[i]);
+        if (section) {
+          const rect = section.getBoundingClientRect();
+          const sectionMid = rect.top + rect.height / 2;
+          if (sectionMid > 80 && sectionMid < window.innerHeight) {
+            setActiveSection(sectionIds[i]);
+            found = true;
+            break;
+          }
+        }
+      }
+      if (!found) setActiveSection("");
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-blue-100 font-sans ">
+      {/* Navbar */}
+      <nav className="sticky top-0 bg-green-700 shadow text-white z-50">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-4">
+          <div className="flex items-center gap-3">
+            <img src="/images/satya.png" alt="Logo" className="h-10 w-10 rounded-full object-cover border-2 border-white shadow mr-2" />
+            <div className="flex flex-col">
+              <span className="text-xl font-bold">ग्रामपंचायत गोमेवाडी</span>
+              <span className="text-sm font-semibold text-green-100 leading-tight">ता. आटपाडी, जि. सांगली</span>
+            </div>
+          </div>
+          {/* Hamburger for mobile only, hidden when menu open */}
+          {!mobileNavOpen && (
+            <button
+              className="md:hidden flex flex-col justify-center items-center w-10 h-10"
+              aria-label="Open menu"
+              onClick={() => setMobileNavOpen(true)}
+            >
+              <span className="block w-7 h-0.5 bg-white mb-1 rounded"></span>
+              <span className="block w-7 h-0.5 bg-white mb-1 rounded"></span>
+              <span className="block w-7 h-0.5 bg-white rounded"></span>
+            </button>
+          )}
+          {/* Desktop nav */}
+          <ul className="hidden md:flex gap-4 text-base font-medium">
+            <li><a href="#home" className={activeSection==="home"?"text-orange-500 font-bold underline":"hover:text-orange-400"}>मुख्यपृष्ठ</a></li>
+            <li><a href="#about" className={activeSection==="about"?"text-orange-500 font-bold underline":"hover:text-orange-400"}>गावाची माहिती</a></li>
+            <li><a href="#development" className={activeSection==="development"?"text-orange-500 font-bold underline":"hover:text-orange-400"}>विकास कामे</a></li>
+            <li><a href="#services" className={activeSection==="services"?"text-orange-500 font-bold underline":"hover:text-orange-400"}>मुख्य योजना</a></li>
+            <li><a href="#certificates" className={activeSection==="certificates"?"text-orange-500 font-bold underline":"hover:text-orange-400"}>प्रमाणपत्रे</a></li>
+            <li><a href="#tax" className={activeSection==="tax"?"text-orange-500 font-bold underline":"hover:text-orange-400"}>कर भरणा</a></li>
+            <li><a href="#members" className={activeSection==="members"?"text-orange-500 font-bold underline":"hover:text-orange-400"}>कार्यकारी मंडळ</a></li>
+            <li><a href="#officials" className={activeSection==="officials"?"text-orange-500 font-bold underline":"hover:text-orange-400"}>कर्मचारी</a></li>
+            <li><a href="#places" className={activeSection==="places"?"text-orange-500 font-bold underline":"hover:text-orange-400"}>पर्यटन</a></li>
+            <li><a href="#contact" className={activeSection==="contact"?"text-orange-500 font-bold underline":"hover:text-orange-400"}>संपर्क</a></li>
+          </ul>
+        </div>
+        {/* Mobile nav dropdown below navbar */}
+        {mobileNavOpen && (
+          <div className="absolute left-0 right-0 top-full bg-green-700 bg-opacity-95 z-[100] rounded-b-xl shadow-2xl md:hidden">
+            {/* Cross button at top right, white color */}
+            <button
+              className="absolute top-3 right-4 text-white text-3xl bg-transparent rounded-full p-2 shadow-none"
+              aria-label="Close menu"
+              onClick={() => setMobileNavOpen(false)}
+            >
+              ×
+            </button>
+            {/* Nav links stacked in 1 column */}
+            <div className="flex flex-col gap-3 w-full max-w-xs mx-auto pt-10 pb-6">
+              <a href="#home" className={activeSection==="home"?"text-orange-500 font-bold underline text-lg":"hover:text-orange-400 text-lg"} onClick={()=>setMobileNavOpen(false)}>मुख्यपृष्ठ</a>
+              <a href="#about" className={activeSection==="about"?"text-orange-500 font-bold underline text-lg":"hover:text-orange-400 text-lg"} onClick={()=>setMobileNavOpen(false)}>गावाची माहिती</a>
+              <a href="#development" className={activeSection==="development"?"text-orange-500 font-bold underline text-lg":"hover:text-orange-400 text-lg"} onClick={()=>setMobileNavOpen(false)}>विकास कामे</a>
+              <a href="#services" className={activeSection==="services"?"text-orange-500 font-bold underline text-lg":"hover:text-orange-400 text-lg"} onClick={()=>setMobileNavOpen(false)}>मुख्य योजना</a>
+              <a href="#certificates" className={activeSection==="certificates"?"text-orange-500 font-bold underline text-lg":"hover:text-orange-400 text-lg"} onClick={()=>setMobileNavOpen(false)}>प्रमाणपत्रे</a>
+              <a href="#tax" className={activeSection==="tax"?"text-orange-500 font-bold underline text-lg":"hover:text-orange-400 text-lg"} onClick={()=>setMobileNavOpen(false)}>कर भरणा</a>
+              <a href="#members" className={activeSection==="members"?"text-orange-500 font-bold underline text-lg":"hover:text-orange-400 text-lg"} onClick={()=>setMobileNavOpen(false)}>कार्यकारी मंडळ</a>
+              <a href="#officials" className={activeSection==="officials"?"text-orange-500 font-bold underline text-lg":"hover:text-orange-400 text-lg"} onClick={()=>setMobileNavOpen(false)}>कर्मचारी</a>
+              <a href="#places" className={activeSection==="places"?"text-orange-500 font-bold underline text-lg":"hover:text-orange-400 text-lg"} onClick={()=>setMobileNavOpen(false)}>पर्यटन</a>
+              <a href="#contact" className={activeSection==="contact"?"text-orange-500 font-bold underline text-lg":"hover:text-orange-400 text-lg"} onClick={()=>setMobileNavOpen(false)}>संपर्क</a>
+            </div>
+          </div>
+        )}
+      </nav>
+
+      {/* ✅ Hero Section – height equals actual image height */}
+
+      <section id="home" className="relative w-full flex justify-center items-center">
+        <div className="relative w-full ">
+          <img
+            src="/images/village.png"
+            alt="गाव दृश्य"
+            className="w-full object-cover h-64 sm:h-80 md:h-full"
+          />
+  <div className="absolute inset-0 flex flex-col items-center justify-top text-center px-4 py-8 md:py-20">
+      <h1 className="text-3xl md:text-[2.5rem] font-extrabold drop-shadow md:mb-5 text-green-700">
+            ग्रामपंचायत गोमेवाडी मध्ये स्वागत आहे
+          </h1>
+          <p className="text-xl md:text-3xl mb-6 font-bold text-green-700">ता.आटपाडी  जि.सांगली </p>
+        </div>
+      </div>
+    </section>
+
+    <div className="bottom-village-content flex flex-col items-center w-full px-1 md:px-0 lg:px-15">
+      {/* Stats Cards */}
+  <div className="flex flex-wrap justify-center px-2 gap-4 sm:gap-8 mt-8 mb-8 w-full">
+        {stats.map((stat, idx) => (
+          <div
+              key={idx}
+              className="bg-white rounded-xl shadow-lg px-10 py-6 flex flex-col items-center 
+                        border-l-4 border-green-400 hover:-translate-y-1 hover:shadow-xl transition
+                        aspect-[5/2] min-w-[200px] w-full md:w-[300px] sm:max-w-xs"
+              data-aos="fade-up"
+              data-aos-delay={100 + idx * 100}
+            >
+
+            <div className="text-4xl mb-2">{stat.icon}</div>
+            <div className="text-2xl font-bold text-green-700 mb-1">{stat.number}</div>
+            <div className="text-gray-600 text-base">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* About Section */}
+      <section id="about" className="px-5 md:px-0 py-10 w-full md:max-w-[81rem] flex flex-col items-center justify-center text-center">
+        <div className="max-w-8xl w-full flex flex-col items-center">
+         
+          <div className="bg-white  rounded-xl shadow-lg p-4 sm:p-8 mb-4 sm:mb-8 hover:shadow-2xl hover:-translate-y-1 transition">
+
+             <h2 className="text-3xl md:text-[2.5rem] font-bold text-green-700 text-center mb-20 mt-5 relative">
+            गावाची माहिती
+            <span className="block w-24 h-1 bg-orange-400 rounded absolute left-1/2 -translate-x-1/2 -bottom-3"></span>
+          </h2>
+            <p className="text-lg text-justify leading-relaxed">
+              गोमेवाडी हे <span className="text-orange-500 font-semibold">महाराष्ट्र राज्यातील सांगली जिल्ह्यातील आटपाडी तालुक्यातील</span> एक प्रगतशील व ऐतिहासिक गाव आहे. २०११ च्या जनगणनेनुसार या गावाची लोकसंख्या सुमारे <span className="text-orange-500 font-semibold">3711</span> आहे.
+              गावामध्ये जिल्हा परिषद प्राथमिक शाळा 4, अंगणवाडी केंद्रे 8, माध्यमिक विद्यालय 1, वाचनालय 1, व्यायामशाळा 1 अशी शैक्षणिक व शारीरिक सुविधा उपलब्ध आहेत.
+              तसेच <span className="text-orange-500 font-semibold">गणपती मंदिर</span> हे प्रसिद्ध देवस्थान आहे.
+            </p>
+            <p className="text-lg text-justify leading-relaxed mt-4">
+              गावातील बहुतांश लोकांचा मुख्य व्यवसाय <span className="text-orange-500 font-semibold">शेती</span> असून अधिकतर <span className="text-orange-500 font-semibold">ज्वारी, गहू ,डाळिंब , ऊस </span> ही प्रमुख पिके घेतली जातात.
+              डाळिंब व ऊस या पिकांच्या लागवडीमुळे गावातील शेतकऱ्यांना चांगले उत्पन्न मिळते.
+              गोमेवाडी ग्रामपंचायतीत विविध शासकीय योजना प्रभावीपणे राबविल्या गेल्या आहेत.
+              <span className="text-orange-500 font-semibold">स्वच्छ भारत अभियान</span> अंतर्गत गोमेवाडी गावाने संपूर्ण
+              <span className="text-orange-500 font-semibold">खुले शौचमुक्त (ODF+)</span> दर्जा मिळवला आहे.
+            </p>
+          </div>
+        </div>
+      </section>
+
+
+      </div>
+
+
+    
+<NewsSection />
+
+    <section id="development" className="pt-0 md:py-10 w-full flex flex-col items-center bg-gray-50 ">
+  <div className="max-w-6xl w-full mx-auto px-2 sm:px-0">
+        <h2 className="text-3xl md:text-[2.5rem] font-bold text-green-700 text-center my-15 relative">विकास कामे
+          <span className="block w-24 h-1 bg-orange-400 rounded absolute left-1/2 -translate-x-1/2 -bottom-3"></span>
+        </h2>
+        <DevelopmentSlideshow />
+      </div>
+    </section>
+
+
+
+
+    
+
+    {/* Services Section */}
+
+<section
+  id="services"
+  className="flex flex-col items-center justify-center w-full bg-gray-50 py-8 pt-20 md:py-0"
+>
+  <div className="w-full mx-auto max-w-[100rem] px-2 sm:px-4 ">
+    <h2 className=" text-3xl md:text-[2.5rem] font-extrabold text-green-700 text-center mb-10 md:mt-15 sm:mb-14">
+      मुख्य योजना
+    </h2>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 md:mx-45">
+      <div className="space-y-4 sm:space-y-6 w-full">
+        {/* Swachh Bharat Mission */}
+        <div
+          className="bg-white rounded-2xl shadow-md p-3 sm:p-6 w-full border-l-4 border-orange-400 hover:shadow-xl hover:-translate-y-1 transition"
+          data-aos="fade-up"
+          data-aos-delay="100"
+        >
+          <h5 className="text-base sm:text-lg md:text-xl font-medium mb-3 flex items-center gap-3">
+            <span>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21h18M4 17l4-8m4 8l4-8" />
+              </svg>
+            </span>
+            स्वच्छ भारत मिशन
+          </h5>
+          <p className="text-sm sm:text-base leading-relaxed">
+            ग्रामीण व शहरी भागात स्वच्छता अभियान राबविण्याची योजना.
+          </p>
+        </div>
+
+        {/* Digital Anganwadi */}
+        <div
+          className="bg-white rounded-2xl shadow-md p-3 sm:p-6 w-full border-l-4 border-orange-400 hover:shadow-xl hover:-translate-y-1 transition"
+          data-aos="fade-up"
+          data-aos-delay="150"
+        >
+          <h5 className="text-base sm:text-lg md:text-xl font-medium mb-3 flex items-center gap-3">
+            <span>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <circle cx="12" cy="8" r="4" />
+                <rect x="6" y="14" width="12" height="6" rx="3" />
+              </svg>
+            </span>
+            डिजिटल अंगणवाडी
+          </h5>
+          <p className="text-sm sm:text-base leading-relaxed">
+            अंगणवाडी केंद्रांना आधुनिक तंत्रज्ञानाने सक्षम करणे.
+          </p>
+        </div>
+
+        {/* Digital School */}
+        <div
+          className="bg-white rounded-2xl shadow-md p-3 sm:p-6 w-full border-l-4 border-orange-400 hover:shadow-xl hover:-translate-y-1 transition"
+          data-aos="fade-up"
+          data-aos-delay="200"
+        >
+          <h5 className="text-base sm:text-lg md:text-xl font-medium mb-3 flex items-center gap-3">
+            <span>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path d="M12 3L2 9l10 6 10-6-10-6z" />
+                <path d="M2 9v6a2 2 0 002 2h16a2 2 0 002-2V9" />
+              </svg>
+            </span>
+            डिजिटल शाळा
+          </h5>
+          <p className="text-sm sm:text-base leading-relaxed">
+            विद्यार्थ्यांना डिजिटल शिक्षण सुविधा उपलब्ध करून देणे.
+          </p>
+        </div>
+      </div>
+
+      <div className="space-y-4 sm:space-y-6 w-full">
+        {/* Digital Grampanchayat */}
+        <div
+          className="bg-white rounded-2xl shadow-md p-3 sm:p-6 w-full border-l-4 border-orange-400 hover:shadow-xl hover:-translate-y-1 transition"
+          data-aos="fade-up"
+          data-aos-delay="250"
+        >
+          <h5 className="text-base sm:text-lg md:text-xl font-medium mb-3 flex items-center gap-3">
+            <span>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <rect x="4" y="8" width="16" height="12" rx="2" />
+                <rect x="9" y="12" width="6" height="8" rx="1" />
+              </svg>
+            </span>
+            डिजिटल ग्रामपंचायत
+          </h5>
+          <p className="text-sm sm:text-base leading-relaxed">
+            ग्रामपंचायत कार्यप्रणालीमध्ये डिजिटायझेशनचा समावेश.
+          </p>
+        </div>
+
+        {/* CCTV */}
+        <div
+          className="bg-white rounded-2xl shadow-md p-3 sm:p-6 w-full border-l-4 border-orange-400 hover:shadow-xl hover:-translate-y-1 transition"
+          data-aos="fade-up"
+          data-aos-delay="300"
+        >
+          <h5 className="text-base sm:text-lg md:text-xl font-medium mb-3 flex items-center gap-3">
+            <span>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <rect x="3" y="7" width="18" height="10" rx="2" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </span>
+            शाळा व अंगणवाडी CCTV
+          </h5>
+          <p className="text-sm sm:text-base leading-relaxed">
+            विद्यार्थ्यांच्या सुरक्षिततेसाठी सीसीटीव्ही सुविधा.
+          </p>
+        </div>
+
+        {/* Aqua RO */}
+        <div
+          className="bg-white rounded-2xl shadow-md p-3 sm:p-6 w-full border-l-4 border-orange-400 hover:shadow-xl hover:-translate-y-1 transition"
+          data-aos="fade-up"
+          data-aos-delay="350"
+        >
+          <h5 className="text-base sm:text-lg md:text-xl font-medium mb-3 flex items-center gap-3">
+            <span>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path d="M12 2C12 2 7 8 7 12a5 5 0 0010 0c0-4-5-10-5-10z" />
+              </svg>
+            </span>
+            अ‍ॅक्वा आरओ शुद्ध पाणी प्रकल्प
+          </h5>
+          <p className="text-sm sm:text-base leading-relaxed">
+            गावात शुद्ध पिण्याचे पाणी उपलब्ध करण्याची योजना.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+{/* Certificates Section */}
+<section
+  id="certificates"
+  className="md:py-10 w-full flex flex-col items-center bg-gray-50 pt-10 md:pt-20 md:pb-30"
+>
+  <div className="max-w-[80rem] w-full mx-auto">
+    <h2 className="text-3xl md:text-[2.5rem] font-bold text-green-700 text-center mb-8">
+      प्रमाणपत्रे
+    </h2>
+ 
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4 md:px-0">
+      {/* Card 1 */}
+      <div
+        className="bg-white rounded-2xl shadow-xl p-6 w-full border border-orange-600
+                   hover:shadow-2xl hover:-translate-y-1 transition"
+        data-aos="fade-up"
+        data-aos-delay="100"
+      >
+        <h4 className="text-base font-semibold mb-2 flex items-center gap-2">
+          <span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <rect x="4" y="8" width="16" height="10" rx="2" />
+              <rect x="9" y="12" width="6" height="6" rx="1" />
+            </svg>
+          </span>
+          नोकरी व्यवसायासाठी नाहरकत स्वयंघोषणापत्र
+        </h4>
+        <p className="text-lg leading-relaxed">
+          नोकरी किंवा व्यवसायासाठी आवश्यक प्रमाणपत्र.
+        </p>
+      </div>
+
+      {/* Card 2 */}
+      <div
+        className="bg-white rounded-2xl shadow-xl p-6 w-full border border-orange-600
+                   hover:shadow-2xl hover:-translate-y-1 transition"
+        data-aos="fade-up"
+        data-aos-delay="200"
+      >
+        <h4 className="text-base font-semibold mb-2 flex items-center gap-2">
+          <span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="8" y1="8" x2="16" y2="16" strokeWidth="2" />
+              <line x1="16" y1="8" x2="8" y2="16" strokeWidth="2" />
+            </svg>
+          </span>
+          बेरोजगार असल्याबाबतचे स्वयंघोषणापत्र
+        </h4>
+        <p className="text-lg leading-relaxed">
+          बेरोजगार असल्याचे प्रमाणित करणारे अधिकृत पत्र.
+        </p>
+      </div>
+
+      {/* Card 3 */}
+      <div
+        className="bg-white rounded-2xl shadow-xl p-6 w-full border border-orange-600
+                   hover:shadow-2xl hover:-translate-y-1 transition"
+        data-aos="fade-up"
+        data-aos-delay="300"
+      >
+        <h4 className="text-base font-semibold mb-2 flex items-center gap-2">
+          <span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path d="M3 12l9-9 9 9" />
+              <rect x="6" y="12" width="12" height="8" rx="2" />
+            </svg>
+          </span>
+          रहिवासी स्वयंघोषणापत्र
+        </h4>
+        <p className="text-lg leading-relaxed">
+          गावातील रहिवासाचा पुरावा म्हणून वापरले जाते.
+        </p>
+      </div>
+
+      {/* Card 4 */}
+      <div
+        className="bg-white rounded-2xl shadow-xl p-6 w-full border border-orange-600
+                   hover:shadow-2xl hover:-translate-y-1 transition"
+        data-aos="fade-up"
+        data-aos-delay="400"
+      >
+        <h4 className="text-base font-semibold mb-2 flex items-center gap-2">
+          <span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <rect x="4" y="6" width="16" height="14" rx="2" />
+              <line x1="8" y1="10" x2="8" y2="14" strokeWidth="2" />
+              <line x1="16" y1="10" x2="16" y2="14" strokeWidth="2" />
+            </svg>
+          </span>
+          वयाबाबत स्वयंघोषणापत्र
+        </h4>
+        <p className="text-lg leading-relaxed">
+          कायदेशीर वय प्रमाणित करण्यासाठी आवश्यक.
+        </p>
+      </div>
+
+      {/* Card 5 */}
+      <div
+        className="bg-white rounded-2xl shadow-xl p-6 w-full border border-orange-600
+                   hover:shadow-2xl hover:-translate-y-1 transition"
+        data-aos="fade-up"
+        data-aos-delay="500"
+      >
+        <h4 className="text-base font-semibold mb-2 flex items-center gap-2">
+          <span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <polygon points="13 2 13 13 17 13 12 22 12 11 8 11 13 2" />
+            </svg>
+          </span>
+          वीज जोडणीसाठी नाहरकत स्वंयघोषणापत्र
+        </h4>
+        <p className="text-lg leading-relaxed">
+          वीज जोडणी घेण्यासाठी आवश्यक प्रमाणपत्र.
+        </p>
+      </div>
+
+      {/* Card 6 */}
+      <div
+        className="bg-white rounded-2xl shadow-xl p-6 w-full border border-orange-600
+                   hover:shadow-2xl hover:-translate-y-1 transition"
+        data-aos="fade-up"
+        data-aos-delay="600"
+      >
+        <h4 className="text-base font-semibold mb-2 flex items-center gap-2">
+          <span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path d="M8 12h8M8 16h8M8 8h8" />
+            </svg>
+          </span>
+          योजनेचा लाभ न घेतल्याबाबत स्वयंघोषणापत्र
+        </h4>
+        <p className="text-lg leading-relaxed">
+          सरकारी योजनेचा लाभ न घेतल्याचे प्रमाणपत्र.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  {/* Tax Section – Left Heading & Right Two Cards Horizontally */}
+
+<section className="w-full flex justify-center items-center bg-white md:p-20 p-5">
+
+  <section
+    id="tax"
+    className=" py-8 px-5 mx-0 w-full bg-gradient-to-br from-green-100 to-blue-50 flex flex-col md:flex-row justify-center items-center md:mx-40 rounded-3xl"
+  >
+    <div className="max-w-6xl w-full flex flex-col  md:flex-row justify-between items-center gap-6  md:gap-10 py-5 sm:px-4">
+      {/* Left: Heading only */}
+      <div className="w-full md:w-2/6 flex items-center justify-center sm:py-0 mb-6 md:mb-0  md:h-full">
+        <h2 className="text-3xl md:text-[2.5rem] font-bold text-green-700 relative text-center w-full">
+          कर भरणा
+          <span className="block w-24 h-1 bg-orange-400 rounded absolute left-1/2 -translate-x-1/2 -bottom-3"></span>
+        </h2>
+      </div>
+
+      {/* Right: Cards arranged vertically on mobile, horizontally on desktop */}
+      <div className="w-full md:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+        {/* पाणीपट्टी */}
+        <div className="bg-white rounded-2xl shadow-lg flex flex-col items-center p-5 sm:p-8 min-h-[320px] w-full
+                        hover:shadow-2xl hover:-translate-y-1 transition">
+          <img
+            src="/images/water-supply.png"
+            alt="पाणीपट्टी"
+            className="w-full h-40 sm:h-48 object-cover rounded mb-2"
+          />
+          <h5 className="text-lg sm:text-xl font-bold mt-2 mb-2 flex items-center gap-2">
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-blue-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path d="M12 2C12 2 7 8 7 12a5 5 0 0010 0c0-4-5-10-5-10z" />
+              </svg>
+            </span>
+            पाणीपट्टी
+          </h5>
+          <p className="mb-3 text-base text-center">घरगुती व शेती पाणीपट्टी ऑनलाइन भरा.</p>
+          <button
+            className="bg-green-600 text-white px-6 py-2 rounded-lg w-full max-w-xs mt-auto hover:bg-green-700 transition text-base font-semibold"
+            onClick={() => setShowQRModal('panipatti')}
+          >
+            भरा
+          </button>
+        </div>
+
+        {/* मालमत्ता कर */}
+        <div className="bg-white rounded-2xl shadow-lg flex flex-col items-center p-5 sm:p-8 min-h-[320px] w-full
+                        hover:shadow-2xl hover:-translate-y-1 transition">
+          <img
+            src="/images/home.jpeg"
+            alt="मालमत्ता कर"
+            className="w-full h-40 sm:h-48 object-cover rounded mb-2"
+          />
+          <h5 className="text-lg sm:text-xl font-bold mt-2 mb-2 flex items-center gap-2">
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-green-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path d="M3 12l9-9 9 9" />
+                <rect x="6" y="12" width="12" height="8" rx="2" />
+              </svg>
+            </span>
+            मालमत्ता कर
+          </h5>
+          <p className="mb-3 text-base text-center">घर व शेतजमिनीसाठी मालमत्ता कर भरा.</p>
+          <button
+            className="bg-green-600 text-white px-6 py-2 rounded-lg w-full max-w-xs mt-auto hover:bg-green-700 transition text-base font-semibold"
+            onClick={() => setShowQRModal('gharpatti')}
+          >
+            भरा
+          </button>
+        </div>
+      </div>
+
+    </div>
+    {/* QR Code Modal */}
+    {showQRModal && (
+      <div className="fixed inset-0 bg-white/5 backdrop-blur-sm flex items-center justify-center z-[200]">
+        <div className="bg-white rounded-xl shadow-lg p-10 flex flex-col items-center relative min-w-[25rem] max-w-xs">
+          <button className="absolute top-2 right-2 text-xl text-gray-600 hover:text-red-500" onClick={()=>setShowQRModal("")}>×</button>
+          <h4  className="text-md font-bold mb-2">{showQRModal === 'panipatti' ? 'Panipatti QR Code' : 'Gharpatti QR Code'}</h4>
+          <img
+            src={showQRModal === 'panipatti'
+              ? (panipattiQR ? panipattiQR : "/images/noQR.jpg")
+              : (gharPattiQR ? gharPattiQR : "/images/noQR.jpg")}
+            alt="QR Code"
+            className="max-w-[90%] object-contain"
+          />
+        </div>
+      </div>
+    )}
+  </section>
+</section>
+
+
+
+
+
+
+      {/* कार्यकारी मंडळ Section  k*/}
+      <ExecutiveBoard />
+
+            {/* Places Section */}
+      <PlacesSection />
+
+      {/* Contact Section */}
+      <ContactSection />
+
+      {/* Footer Section */}
+
+<FooterSection />
+
+
+  
+    
+  </div>
+  );
+}
+
+export default MainPage;
+
