@@ -1,7 +1,7 @@
 import React from "react";
 
 const PlacesSection = () => (
-  <section id="places" className="py-10 bg-white md:pt-30 ">
+  <section id="places" className="py-10 bg-white pt-17 md:pt-30 ">
     <div className="max-w-6xl mx-auto px-4 flex flex-col items-center">
       <h2 className="text-3xl md:text-[2.5rem] font-bold text-green-700 mb-10 relative">गावातील प्रसिद्ध स्थळे
         <span className="block w-24 h-1 bg-orange-400 rounded absolute left-1/2 -translate-x-1/2 -bottom-3"></span>
@@ -15,9 +15,9 @@ const PlacesSection = () => (
         </div>
         {/* अर्जुनवडी तलाव */}
         <div className="bg-white rounded-xl shadow-lg p-4 fade-in flex flex-col justify-between items-center h-full hover:shadow-2xl hover:-translate-y-1 transition">
-          <img src="images/talav.jpg" alt="अर्जुनवडी तलाव" className="w-full h-48 object-cover rounded-xl mb-4" />
+          <img src="images/talav.jpg" alt="अर्जुनवाडी तलाव" className="w-full h-48 object-cover rounded-xl mb-4" />
           <h5 className="text-lg font-bold mb-2 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 12h16"/><path d="M12 4v16"/></svg> अर्जुनवडी तलाव</h5>
-          <p className="text-justify">अर्जुनवडी तलाव गावाच्या पश्चिम भागात स्थित आहे. पावसाळ्यात तलावाचे सौंदर्य अधिक खुलते, आणि हे ट्रेकिंगसाठी एक लोकप्रिय ठिकाण आहे. आसपास पिकनिक स्पॉट्स उपलब्ध आहेत. पर्यटकांना येथे शांततादायी आणि नैसर्गिक वातावरण अनुभवता येते.</p>
+          <p className="text-justify">अर्जुनवाडी तलाव गावाच्या पश्चिम भागात स्थित आहे. पावसाळ्यात तलावाचे सौंदर्य अधिक खुलते, आणि हे ट्रेकिंगसाठी एक लोकप्रिय ठिकाण आहे. आसपास पिकनिक स्पॉट्स उपलब्ध आहेत. पर्यटकांना येथे शांततादायी आणि नैसर्गिक वातावरण अनुभवता येते.</p>
         </div>
 
 

@@ -17,19 +17,19 @@ const NewsSection = () => {
   }, []);
 
   return (
-    <section className="w-full bg-yellow-100 border-y-2 border-y-orange-400 py-6 md:px-20   flex flex-col md:flex-row items-center overflow-hidden">
+    <section className="w-full bg-white border-y-2 border-y-orange-400 py-4 md:px-20 mb-13 md:mb-20  flex flex-col md:flex-row items-center overflow-hidden">
       <div className="font-bold text-3xl text-orange-700 px-4 whitespace-nowrap">
         बातम्या
       </div>
       <marquee className="text-green-800 font-medium text-base">
         {newsItems.length > 0 ? (
           newsItems.map((item, idx) => (
-            <span key={item._id || idx} className="mx-6 text-2xl font-bold">
+            <span key={item._id || idx} className="mx-6 text-2xl font-bold text-green-800">
               • {item.text}
             </span>
           ))
         ) : (
-          <span className="mx-6 text-gray-500">No news available</span>
+          <span className="mx-6 text-2xl text-gray-500">No news available</span>
         )}
       </marquee>
     </section>

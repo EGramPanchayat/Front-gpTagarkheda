@@ -27,7 +27,7 @@ const ExecutiveBoard = () => {
 
   return (
     <>
-      <section id="members" className="relative w-full pt-15 md:pt-30 pb-10 flex flex-col items-center bg-gray-50">
+      <section id="members" className="relative w-full pt-30 md:pt-30 pb-10 flex flex-col items-center bg-gray-50">
         <div className="max-w-10xl w-full mx-auto">
           <h2 className="text-3xl md:text-[2.5rem] font-bold text-green-700 text-center mb-8 relative">
             कार्यकारी मंडळ

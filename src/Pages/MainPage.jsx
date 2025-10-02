@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import ExecutiveBoard from "../Components/ExecutiveBoard";
+import Navbar from "../Components/Navbar";
 import NewsSection from "../Components/NewsSection";
 import axioesInstance from "../utils/axioesInstance";
 
 import PlacesSection from "../Components/PlacesSection";
 import ContactSection from "../Components/ContactSection";
 import FooterSection from "../Components/FooterSection";
+import CertificatesSection from "../Components/CertificatesSection";
+import ServicesSection from "../Components/ServicesSection";
 
 // Executive members data for cards
 const executiveMembers = [
@@ -161,8 +164,9 @@ const MainPage = () => {
   useEffect(() => {
     axioesInstance.get("/qr").then((response) => {
       const data = response.data;
-      setPanipattiQR(data.gharPattiQR?.url);
-      setGharPattiQR(data.panipattiQR?.url);
+      setPanipattiQR(data.panipattiQR?.url);
+      setGharPattiQR(data.gharPattiQR?.url);
+
     })
   }, []);
 
@@ -188,70 +192,9 @@ const MainPage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-blue-100 font-sans ">
-      {/* Navbar */}
-      <nav className="sticky top-0 bg-green-700 shadow text-white z-50">
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-4">
-          <div className="flex items-center gap-3">
-            <img src="/images/satya.png" alt="Logo" className="h-10 w-10 rounded-full object-cover border-2 border-white shadow mr-2" />
-            <div className="flex flex-col">
-              <span className="text-xl font-bold">ग्रामपंचायत गोमेवाडी</span>
-              <span className="text-sm font-semibold text-green-100 leading-tight">ता. आटपाडी, जि. सांगली</span>
-            </div>
-          </div>
-          {/* Hamburger for mobile only, hidden when menu open */}
-          {!mobileNavOpen && (
-            <button
-              className="md:hidden flex flex-col justify-center items-center w-10 h-10"
-              aria-label="Open menu"
-              onClick={() => setMobileNavOpen(true)}
-            >
-              <span className="block w-7 h-0.5 bg-white mb-1 rounded"></span>
-              <span className="block w-7 h-0.5 bg-white mb-1 rounded"></span>
-              <span className="block w-7 h-0.5 bg-white rounded"></span>
-            </button>
-          )}
-          {/* Desktop nav */}
-          <ul className="hidden md:flex gap-4 text-base font-medium">
-            <li><a href="#home" className={activeSection==="home"?"text-orange-500 font-bold underline":"hover:text-orange-400"}>मुख्यपृष्ठ</a></li>
-            <li><a href="#about" className={activeSection==="about"?"text-orange-500 font-bold underline":"hover:text-orange-400"}>गावाची माहिती</a></li>
-            <li><a href="#development" className={activeSection==="development"?"text-orange-500 font-bold underline":"hover:text-orange-400"}>विकास कामे</a></li>
-            <li><a href="#services" className={activeSection==="services"?"text-orange-500 font-bold underline":"hover:text-orange-400"}>मुख्य योजना</a></li>
-            <li><a href="#certificates" className={activeSection==="certificates"?"text-orange-500 font-bold underline":"hover:text-orange-400"}>प्रमाणपत्रे</a></li>
-            <li><a href="#tax" className={activeSection==="tax"?"text-orange-500 font-bold underline":"hover:text-orange-400"}>कर भरणा</a></li>
-            <li><a href="#members" className={activeSection==="members"?"text-orange-500 font-bold underline":"hover:text-orange-400"}>कार्यकारी मंडळ</a></li>
-            <li><a href="#officials" className={activeSection==="officials"?"text-orange-500 font-bold underline":"hover:text-orange-400"}>कर्मचारी</a></li>
-            <li><a href="#places" className={activeSection==="places"?"text-orange-500 font-bold underline":"hover:text-orange-400"}>पर्यटन</a></li>
-            <li><a href="#contact" className={activeSection==="contact"?"text-orange-500 font-bold underline":"hover:text-orange-400"}>संपर्क</a></li>
-          </ul>
-        </div>
-        {/* Mobile nav dropdown below navbar */}
-        {mobileNavOpen && (
-          <div className="absolute left-0 right-0 top-full bg-green-700 bg-opacity-95 z-[100] rounded-b-xl shadow-2xl md:hidden">
-            {/* Cross button at top right, white color */}
-            <button
-              className="absolute top-3 right-4 text-white text-3xl bg-transparent rounded-full p-2 shadow-none"
-              aria-label="Close menu"
-              onClick={() => setMobileNavOpen(false)}
-            >
-              ×
-            </button>
-            {/* Nav links stacked in 1 column */}
-            <div className="flex flex-col gap-3 w-full max-w-xs mx-auto pt-10 pb-6">
-              <a href="#home" className={activeSection==="home"?"text-orange-500 font-bold underline text-lg":"hover:text-orange-400 text-lg"} onClick={()=>setMobileNavOpen(false)}>मुख्यपृष्ठ</a>
-              <a href="#about" className={activeSection==="about"?"text-orange-500 font-bold underline text-lg":"hover:text-orange-400 text-lg"} onClick={()=>setMobileNavOpen(false)}>गावाची माहिती</a>
-              <a href="#development" className={activeSection==="development"?"text-orange-500 font-bold underline text-lg":"hover:text-orange-400 text-lg"} onClick={()=>setMobileNavOpen(false)}>विकास कामे</a>
-              <a href="#services" className={activeSection==="services"?"text-orange-500 font-bold underline text-lg":"hover:text-orange-400 text-lg"} onClick={()=>setMobileNavOpen(false)}>मुख्य योजना</a>
-              <a href="#certificates" className={activeSection==="certificates"?"text-orange-500 font-bold underline text-lg":"hover:text-orange-400 text-lg"} onClick={()=>setMobileNavOpen(false)}>प्रमाणपत्रे</a>
-              <a href="#tax" className={activeSection==="tax"?"text-orange-500 font-bold underline text-lg":"hover:text-orange-400 text-lg"} onClick={()=>setMobileNavOpen(false)}>कर भरणा</a>
-              <a href="#members" className={activeSection==="members"?"text-orange-500 font-bold underline text-lg":"hover:text-orange-400 text-lg"} onClick={()=>setMobileNavOpen(false)}>कार्यकारी मंडळ</a>
-              <a href="#officials" className={activeSection==="officials"?"text-orange-500 font-bold underline text-lg":"hover:text-orange-400 text-lg"} onClick={()=>setMobileNavOpen(false)}>कर्मचारी</a>
-              <a href="#places" className={activeSection==="places"?"text-orange-500 font-bold underline text-lg":"hover:text-orange-400 text-lg"} onClick={()=>setMobileNavOpen(false)}>पर्यटन</a>
-              <a href="#contact" className={activeSection==="contact"?"text-orange-500 font-bold underline text-lg":"hover:text-orange-400 text-lg"} onClick={()=>setMobileNavOpen(false)}>संपर्क</a>
-            </div>
-          </div>
-        )}
-      </nav>
+      <div className="min-h-screen bg-gradient-to-br from-gray-100 to-blue-100 font-sans ">
+        {/* Navbar */}
+        <Navbar activeSection={activeSection} mobileNavOpen={mobileNavOpen} setMobileNavOpen={setMobileNavOpen} />
 
       {/* ✅ Hero Section – height equals actual image height */}
 
@@ -277,16 +220,18 @@ const MainPage = () => {
         {stats.map((stat, idx) => (
           <div
               key={idx}
-              className="bg-white rounded-xl shadow-lg px-10 py-6 flex flex-col items-center 
-                        border-l-4 border-green-400 hover:-translate-y-1 hover:shadow-xl transition
-                        aspect-[5/2] min-w-[200px] w-full md:w-[300px] sm:max-w-xs"
-              data-aos="fade-up"
-              data-aos-delay={100 + idx * 100}
-            >
-
-            <div className="text-4xl mb-2">{stat.icon}</div>
-            <div className="text-2xl font-bold text-green-700 mb-1">{stat.number}</div>
-            <div className="text-gray-600 text-base">{stat.label}</div>
+              className={
+                `bg-white rounded-xl shadow-lg px-10 py-6 flex flex-col items-center 
+                border-l-4 border-green-400 hover:-translate-y-1 hover:shadow-xl transition
+                aspect-[5/2] min-w-[200px] w-full md:w-[300px] sm:max-w-xs
+                animate-[fadeUpSmall_0.7s_ease-out]`
+              }
+              style={{animationDelay: `${0.1 + idx * 0.1}s`}}>
+            <div>
+               <div className="text-4xl mb-2 flex justify-center ">{stat.icon}</div>
+              <div className="text-2xl font-bold text-green-700 mb-1 flex justify-center">{stat.number}</div>
+              <div className="text-gray-600 text-base flex justify-center">{stat.label}</div>
+            </div>
           </div>
         ))}
       </div>
@@ -311,7 +256,7 @@ const MainPage = () => {
               डाळिंब व ऊस या पिकांच्या लागवडीमुळे गावातील शेतकऱ्यांना चांगले उत्पन्न मिळते.
               गोमेवाडी ग्रामपंचायतीत विविध शासकीय योजना प्रभावीपणे राबविल्या गेल्या आहेत.
               <span className="text-orange-500 font-semibold">स्वच्छ भारत अभियान</span> अंतर्गत गोमेवाडी गावाने संपूर्ण
-              <span className="text-orange-500 font-semibold">खुले शौचमुक्त (ODF+)</span> दर्जा मिळवला आहे.
+              <span className="text-orange-500 font-semibold"> खुले शौचमुक्त (ODF+)</span> दर्जा मिळवला आहे.
             </p>
           </div>
         </div>
@@ -340,289 +285,18 @@ const MainPage = () => {
 
     {/* Services Section */}
 
-<section
-  id="services"
-  className="flex flex-col items-center justify-center w-full bg-gray-50 py-8 pt-20 md:py-0"
->
-  <div className="w-full mx-auto max-w-[100rem] px-2 sm:px-4 ">
-    <h2 className=" text-3xl md:text-[2.5rem] font-extrabold text-green-700 text-center mb-10 md:mt-15 sm:mb-14">
-      मुख्य योजना
-    </h2>
+<ServicesSection  />
 
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 md:mx-45">
-      <div className="space-y-4 sm:space-y-6 w-full">
-        {/* Swachh Bharat Mission */}
-        <div
-          className="bg-white rounded-2xl shadow-md p-3 sm:p-6 w-full border-l-4 border-orange-400 hover:shadow-xl hover:-translate-y-1 transition"
-          data-aos="fade-up"
-          data-aos-delay="100"
-        >
-          <h5 className="text-base sm:text-lg md:text-xl font-medium mb-3 flex items-center gap-3">
-            <span>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21h18M4 17l4-8m4 8l4-8" />
-              </svg>
-            </span>
-            स्वच्छ भारत मिशन
-          </h5>
-          <p className="text-sm sm:text-base leading-relaxed">
-            ग्रामीण व शहरी भागात स्वच्छता अभियान राबविण्याची योजना.
-          </p>
-        </div>
-
-        {/* Digital Anganwadi */}
-        <div
-          className="bg-white rounded-2xl shadow-md p-3 sm:p-6 w-full border-l-4 border-orange-400 hover:shadow-xl hover:-translate-y-1 transition"
-          data-aos="fade-up"
-          data-aos-delay="150"
-        >
-          <h5 className="text-base sm:text-lg md:text-xl font-medium mb-3 flex items-center gap-3">
-            <span>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <circle cx="12" cy="8" r="4" />
-                <rect x="6" y="14" width="12" height="6" rx="3" />
-              </svg>
-            </span>
-            डिजिटल अंगणवाडी
-          </h5>
-          <p className="text-sm sm:text-base leading-relaxed">
-            अंगणवाडी केंद्रांना आधुनिक तंत्रज्ञानाने सक्षम करणे.
-          </p>
-        </div>
-
-        {/* Digital School */}
-        <div
-          className="bg-white rounded-2xl shadow-md p-3 sm:p-6 w-full border-l-4 border-orange-400 hover:shadow-xl hover:-translate-y-1 transition"
-          data-aos="fade-up"
-          data-aos-delay="200"
-        >
-          <h5 className="text-base sm:text-lg md:text-xl font-medium mb-3 flex items-center gap-3">
-            <span>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path d="M12 3L2 9l10 6 10-6-10-6z" />
-                <path d="M2 9v6a2 2 0 002 2h16a2 2 0 002-2V9" />
-              </svg>
-            </span>
-            डिजिटल शाळा
-          </h5>
-          <p className="text-sm sm:text-base leading-relaxed">
-            विद्यार्थ्यांना डिजिटल शिक्षण सुविधा उपलब्ध करून देणे.
-          </p>
-        </div>
-      </div>
-
-      <div className="space-y-4 sm:space-y-6 w-full">
-        {/* Digital Grampanchayat */}
-        <div
-          className="bg-white rounded-2xl shadow-md p-3 sm:p-6 w-full border-l-4 border-orange-400 hover:shadow-xl hover:-translate-y-1 transition"
-          data-aos="fade-up"
-          data-aos-delay="250"
-        >
-          <h5 className="text-base sm:text-lg md:text-xl font-medium mb-3 flex items-center gap-3">
-            <span>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <rect x="4" y="8" width="16" height="12" rx="2" />
-                <rect x="9" y="12" width="6" height="8" rx="1" />
-              </svg>
-            </span>
-            डिजिटल ग्रामपंचायत
-          </h5>
-          <p className="text-sm sm:text-base leading-relaxed">
-            ग्रामपंचायत कार्यप्रणालीमध्ये डिजिटायझेशनचा समावेश.
-          </p>
-        </div>
-
-        {/* CCTV */}
-        <div
-          className="bg-white rounded-2xl shadow-md p-3 sm:p-6 w-full border-l-4 border-orange-400 hover:shadow-xl hover:-translate-y-1 transition"
-          data-aos="fade-up"
-          data-aos-delay="300"
-        >
-          <h5 className="text-base sm:text-lg md:text-xl font-medium mb-3 flex items-center gap-3">
-            <span>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <rect x="3" y="7" width="18" height="10" rx="2" />
-                <circle cx="12" cy="12" r="3" />
-              </svg>
-            </span>
-            शाळा व अंगणवाडी CCTV
-          </h5>
-          <p className="text-sm sm:text-base leading-relaxed">
-            विद्यार्थ्यांच्या सुरक्षिततेसाठी सीसीटीव्ही सुविधा.
-          </p>
-        </div>
-
-        {/* Aqua RO */}
-        <div
-          className="bg-white rounded-2xl shadow-md p-3 sm:p-6 w-full border-l-4 border-orange-400 hover:shadow-xl hover:-translate-y-1 transition"
-          data-aos="fade-up"
-          data-aos-delay="350"
-        >
-          <h5 className="text-base sm:text-lg md:text-xl font-medium mb-3 flex items-center gap-3">
-            <span>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path d="M12 2C12 2 7 8 7 12a5 5 0 0010 0c0-4-5-10-5-10z" />
-              </svg>
-            </span>
-            अ‍ॅक्वा आरओ शुद्ध पाणी प्रकल्प
-          </h5>
-          <p className="text-sm sm:text-base leading-relaxed">
-            गावात शुद्ध पिण्याचे पाणी उपलब्ध करण्याची योजना.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<CertificatesSection />
 
 
 
-
-{/* Certificates Section */}
-<section
-  id="certificates"
-  className="md:py-10 w-full flex flex-col items-center bg-gray-50 pt-10 md:pt-20 md:pb-30"
->
-  <div className="max-w-[80rem] w-full mx-auto">
-    <h2 className="text-3xl md:text-[2.5rem] font-bold text-green-700 text-center mb-8">
-      प्रमाणपत्रे
-    </h2>
- 
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4 md:px-0">
-      {/* Card 1 */}
-      <div
-        className="bg-white rounded-2xl shadow-xl p-6 w-full border border-orange-600
-                   hover:shadow-2xl hover:-translate-y-1 transition"
-        data-aos="fade-up"
-        data-aos-delay="100"
-      >
-        <h4 className="text-base font-semibold mb-2 flex items-center gap-2">
-          <span>
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <rect x="4" y="8" width="16" height="10" rx="2" />
-              <rect x="9" y="12" width="6" height="6" rx="1" />
-            </svg>
-          </span>
-          नोकरी व्यवसायासाठी नाहरकत स्वयंघोषणापत्र
-        </h4>
-        <p className="text-lg leading-relaxed">
-          नोकरी किंवा व्यवसायासाठी आवश्यक प्रमाणपत्र.
-        </p>
-      </div>
-
-      {/* Card 2 */}
-      <div
-        className="bg-white rounded-2xl shadow-xl p-6 w-full border border-orange-600
-                   hover:shadow-2xl hover:-translate-y-1 transition"
-        data-aos="fade-up"
-        data-aos-delay="200"
-      >
-        <h4 className="text-base font-semibold mb-2 flex items-center gap-2">
-          <span>
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="8" y1="8" x2="16" y2="16" strokeWidth="2" />
-              <line x1="16" y1="8" x2="8" y2="16" strokeWidth="2" />
-            </svg>
-          </span>
-          बेरोजगार असल्याबाबतचे स्वयंघोषणापत्र
-        </h4>
-        <p className="text-lg leading-relaxed">
-          बेरोजगार असल्याचे प्रमाणित करणारे अधिकृत पत्र.
-        </p>
-      </div>
-
-      {/* Card 3 */}
-      <div
-        className="bg-white rounded-2xl shadow-xl p-6 w-full border border-orange-600
-                   hover:shadow-2xl hover:-translate-y-1 transition"
-        data-aos="fade-up"
-        data-aos-delay="300"
-      >
-        <h4 className="text-base font-semibold mb-2 flex items-center gap-2">
-          <span>
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path d="M3 12l9-9 9 9" />
-              <rect x="6" y="12" width="12" height="8" rx="2" />
-            </svg>
-          </span>
-          रहिवासी स्वयंघोषणापत्र
-        </h4>
-        <p className="text-lg leading-relaxed">
-          गावातील रहिवासाचा पुरावा म्हणून वापरले जाते.
-        </p>
-      </div>
-
-      {/* Card 4 */}
-      <div
-        className="bg-white rounded-2xl shadow-xl p-6 w-full border border-orange-600
-                   hover:shadow-2xl hover:-translate-y-1 transition"
-        data-aos="fade-up"
-        data-aos-delay="400"
-      >
-        <h4 className="text-base font-semibold mb-2 flex items-center gap-2">
-          <span>
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <rect x="4" y="6" width="16" height="14" rx="2" />
-              <line x1="8" y1="10" x2="8" y2="14" strokeWidth="2" />
-              <line x1="16" y1="10" x2="16" y2="14" strokeWidth="2" />
-            </svg>
-          </span>
-          वयाबाबत स्वयंघोषणापत्र
-        </h4>
-        <p className="text-lg leading-relaxed">
-          कायदेशीर वय प्रमाणित करण्यासाठी आवश्यक.
-        </p>
-      </div>
-
-      {/* Card 5 */}
-      <div
-        className="bg-white rounded-2xl shadow-xl p-6 w-full border border-orange-600
-                   hover:shadow-2xl hover:-translate-y-1 transition"
-        data-aos="fade-up"
-        data-aos-delay="500"
-      >
-        <h4 className="text-base font-semibold mb-2 flex items-center gap-2">
-          <span>
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <polygon points="13 2 13 13 17 13 12 22 12 11 8 11 13 2" />
-            </svg>
-          </span>
-          वीज जोडणीसाठी नाहरकत स्वंयघोषणापत्र
-        </h4>
-        <p className="text-lg leading-relaxed">
-          वीज जोडणी घेण्यासाठी आवश्यक प्रमाणपत्र.
-        </p>
-      </div>
-
-      {/* Card 6 */}
-      <div
-        className="bg-white rounded-2xl shadow-xl p-6 w-full border border-orange-600
-                   hover:shadow-2xl hover:-translate-y-1 transition"
-        data-aos="fade-up"
-        data-aos-delay="600"
-      >
-        <h4 className="text-base font-semibold mb-2 flex items-center gap-2">
-          <span>
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path d="M8 12h8M8 16h8M8 8h8" />
-            </svg>
-          </span>
-          योजनेचा लाभ न घेतल्याबाबत स्वयंघोषणापत्र
-        </h4>
-        <p className="text-lg leading-relaxed">
-          सरकारी योजनेचा लाभ न घेतल्याचे प्रमाणपत्र.
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
 
 
 
   {/* Tax Section – Left Heading & Right Two Cards Horizontally */}
 
-<section className="w-full flex justify-center items-center bg-white md:p-20 p-5">
+<section className="w-full flex justify-center items-center bg-white pt-25 md:p-20 ">
 
   <section
     id="tax"

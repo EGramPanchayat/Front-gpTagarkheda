@@ -5,9 +5,8 @@ const axiosInstance = axios.create({
   withCredentials: true, // send cookies if needed
   headers: {
     "Content-Type": "application/json",
-    
-    "x-gp-name":import.meta.env.VITE_GP_NAME,   // custom header for GP
-  
+    "x-gp-name": import.meta.env.VITE_GP_NAME, // custom header for GP
+
   },
 });
 
