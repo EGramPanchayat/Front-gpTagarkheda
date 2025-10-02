@@ -13,10 +13,8 @@ const CertificatesSection = () => (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4 md:px-0">
       {/* Card 1 */}
       <div
-        className="bg-white rounded-2xl shadow-xl p-6 w-full border border-orange-600
-                   hover:shadow-2xl hover:-translate-y-1 transition"
-        data-aos="fade-up"
-        data-aos-delay="100"
+  className="bg-white rounded-2xl shadow p-6 w-full border border-orange-600 transition-all duration-300 hover:shadow-md hover:-translate-x-1"
+
       >
         <h4 className="text-base font-semibold mb-2 flex items-center gap-2">
           <span>
@@ -34,10 +32,8 @@ const CertificatesSection = () => (
 
       {/* Card 2 */}
       <div
-        className="bg-white rounded-2xl shadow-xl p-6 w-full border border-orange-600
-                   hover:shadow-2xl hover:-translate-y-1 transition"
-        data-aos="fade-up"
-        data-aos-delay="200"
+       className="bg-white rounded-2xl shadow p-6 w-full border border-orange-600 transition-all duration-300 hover:shadow-md hover:-translate-x-1"
+
       >
         <h4 className="text-base font-semibold mb-2 flex items-center gap-2">
           <span>
@@ -56,10 +52,8 @@ const CertificatesSection = () => (
 
       {/* Card 3 */}
       <div
-        className="bg-white rounded-2xl shadow-xl p-6 w-full border border-orange-600
-                   hover:shadow-2xl hover:-translate-y-1 transition"
-        data-aos="fade-up"
-        data-aos-delay="300"
+        className="bg-white rounded-2xl shadow p-6 w-full border border-orange-600 transition-all duration-300 hover:shadow-md hover:-translate-x-1"
+
       >
         <h4 className="text-base font-semibold mb-2 flex items-center gap-2">
           <span>
@@ -77,10 +71,8 @@ const CertificatesSection = () => (
 
       {/* Card 4 */}
       <div
-        className="bg-white rounded-2xl shadow-xl p-6 w-full border border-orange-600
-                   hover:shadow-2xl hover:-translate-y-1 transition"
-        data-aos="fade-up"
-        data-aos-delay="400"
+       className="bg-white rounded-2xl shadow p-6 w-full border border-orange-600 transition-all duration-300 hover:shadow-md hover:-translate-x-1"
+
       >
         <h4 className="text-base font-semibold mb-2 flex items-center gap-2">
           <span>
@@ -99,10 +91,8 @@ const CertificatesSection = () => (
 
       {/* Card 5 */}
       <div
-        className="bg-white rounded-2xl shadow-xl p-6 w-full border border-orange-600
-                   hover:shadow-2xl hover:-translate-y-1 transition"
-        data-aos="fade-up"
-        data-aos-delay="500"
+       className="bg-white rounded-2xl shadow p-6 w-full border border-orange-600 transition-all duration-300 hover:shadow-md hover:-translate-x-1"
+
       >
         <h4 className="text-base font-semibold mb-2 flex items-center gap-2">
           <span>
@@ -119,10 +109,8 @@ const CertificatesSection = () => (
 
       {/* Card 6 */}
       <div
-        className="bg-white rounded-2xl shadow-xl p-6 w-full border border-orange-600
-                   hover:shadow-2xl hover:-translate-y-1 transition"
-        data-aos="fade-up"
-        data-aos-delay="600"
+       className="bg-white rounded-2xl shadow p-6 w-full border border-orange-600 transition-all duration-300 hover:shadow-md hover:-translate-x-1"
+
       >
         <h4 className="text-base font-semibold mb-2 flex items-center gap-2">
           <span>
