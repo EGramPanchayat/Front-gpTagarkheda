@@ -10,7 +10,7 @@ import { Link } from "react-scroll";
 
 // ---------- Helpers ----------
 const newMember = (data = {}) => ({
-  _id: data._id || uuidv4(), // use backend _id if present
+  id: data.id || uuidv4(),
   name: data.name || "",
   mobile: data.mobile || "",
   image: null,
@@ -19,7 +19,7 @@ const newMember = (data = {}) => ({
 
 const newOfficer = (role, data = {}) => ({
   role,
-  _id: data._id || uuidv4(),
+  id: data.id || uuidv4(),
   name: data.name || "",
   mobile: data.mobile || "",
   image: null,
@@ -138,24 +138,14 @@ export default function AdminDashboard() {
 
   // ---------- Handlers ----------
   const updateMember = (id, key, val) =>
-    setMembers(ms => ms.map(m => (m._id === id ? { ...m, [key]: val } : m)));
+    setMembers(ms => ms.map(m => (m.id === id ? { ...m, [key]: val } : m)));
 
   const addMember = () => setMembers(ms => [...ms, newMember()]);
 
-  const removeMember = async id => {
-    try {
-      // Call backend delete
-      await axioesInstance.delete(`/exboard-karyakari-mandal/member/${id}`);
-      // Update UI
-      setMembers(ms => ms.filter(m => m._id !== id));
-      toast.success("सदस्य यशस्वीरित्या हटविला!");
-    } catch (err) {
-      toast.error(`हटवण्यात अडचण: ${err.message}`);
-    }
-  };
+  const removeMember = id => setMembers(ms => ms.filter(m => m.id !== id));
 
   const updateOfficer = (id, key, val) =>
-    setOfficers(os => os.map(o => (o._id === id ? { ...o, [key]: val } : o)));
+    setOfficers(os => os.map(o => (o.id === id ? { ...o, [key]: val } : o)));
 
   const validate = () => {
     const ten = /^\d{10}$/;
@@ -190,18 +180,18 @@ export default function AdminDashboard() {
     if (upsarpanch.image) fd.append("upsarpanch", upsarpanch.image);
 
     members.forEach((m, idx) => {
-      fd.append(`members[${idx}][_id]`, m._id);
+      fd.append(`members[${idx}][id]`, m.id);
       fd.append(`members[${idx}][name]`, m.name);
       fd.append(`members[${idx}][mobile]`, m.mobile);
-      if (m.image) fd.append(`memberImages[${m._id}]`, m.image);
+      if (m.image) fd.append(`memberImages[${m.id}]`, m.image);
     });
 
     officers.forEach((o, idx) => {
-      fd.append(`staff[${idx}][_id]`, o._id);
+      fd.append(`staff[${idx}][id]`, o.id);
       fd.append(`staff[${idx}][role]`, o.role);
       fd.append(`staff[${idx}][name]`, o.name);
       fd.append(`staff[${idx}][mobile]`, o.mobile);
-      if (o.image) fd.append(`officerImages[${o._id}]`, o.image);
+      if (o.image) fd.append(`officerImages[${o.id}]`, o.image);
     });
 
     try {
@@ -221,8 +211,167 @@ export default function AdminDashboard() {
   return (
     <>
       <QRUploadModal open={qrModalOpen} onClose={() => setQrModalOpen(false)} />
+  
+     
       {/* NAVBAR */}
-      {/* ... (same navbar code as yours) ... */}
+      <nav className="bg-green-700 text-white shadow-md fixed top-0 left-0 right-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+                <img
+                  src="/images/satyamev.jpg"
+                  alt="Logo"
+                  className="h-10 w-10 rounded-full object-cover border-2 border-white shadow"
+                />
+                <div className="flex flex-col">
+                  <h1 className="text-lg md:text-xl font-bold tracking-wide whitespace-nowrap">
+                    ग्रामपंचायत गोमेवाडी 
+                  </h1>
+                  <span className="text-sm md:text-base text-white/80">
+                    ता. आटपाडी जि. सांगली
+                  </span>
+                </div>
+              </div>
+
+          <div className="relative w-full">
+            <button
+              id="navbar-toggle"
+              className="md:hidden flex flex-col justify-center items-center w-10 h-10 absolute right-4 top-1/2 -translate-y-1/2 z-50"
+              onClick={() => {
+                const menu = document.getElementById("navbar-menu");
+                const toggle = document.getElementById("navbar-toggle");
+                if (menu.classList.contains("hidden")) {
+                  menu.classList.remove("hidden");
+                  toggle.classList.add("hidden");
+                }
+              }}
+              aria-label="Open menu"
+            >
+              <span className="block w-7 h-0.5 bg-white mb-1 rounded"></span>
+              <span className="block w-7 h-0.5 bg-white mb-1 rounded"></span>
+              <span className="block w-7 h-0.5 bg-white rounded"></span>
+            </button>
+            <div
+              id="navbar-menu"
+              className="hidden md:flex gap-8 text-base font-semibold items-center fixed md:static left-0 top-16 w-full bg-green-700 md:bg-transparent rounded-b shadow-2xl md:shadow-none p-6 md:p-0 z-50"
+            >
+              {/* Cross button for mobile nav */}
+              <button
+                className="absolute right-4 top-4 text-white text-2xl md:hidden"
+                aria-label="Close menu"
+                onClick={() => {
+                  const menu = document.getElementById("navbar-menu");
+                  const toggle = document.getElementById("navbar-toggle");
+                  menu.classList.add("hidden");
+                  toggle.classList.remove("hidden");
+                }}
+              >
+                ×
+              </button>
+              <div className="flex flex-col md:flex-row w-full items-start md:items-center justify-start md:justify-end gap-6 md:gap-8 mt-8 md:mt-0">
+                <Link to="news-section" smooth duration={500} className="cursor-pointer text-gray-300 hover:text-green-300">बातम्या</Link>
+                <Link to="devworks-section" smooth duration={500} className="cursor-pointer text-gray-300 hover:text-green-300">विकास कामे</Link>
+                <Link to="exec-section" smooth duration={500} className="cursor-pointer text-gray-300 hover:text-green-300">कार्यकारिणी</Link>
+                <button
+                  className="cursor-pointer text-gray-300 hover:text-green-300 text-base font-semibold bg-transparent border-none p-0 m-0"
+                  onClick={() => setQrModalOpen(true)}
+                  style={{ fontWeight: "inherit" }}
+                >
+                  कर
+                </button>
+                <button
+                  onClick={() => {
+                    localStorage.removeItem("adminToken");
+                    window.location.href = "/login";
+                  }}
+                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded shadow font-bold transition"
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+
+      <nav className="bg-green-700 text-white shadow-md fixed top-0 left-0 right-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <img
+              src="/images/satyamev.jpg"
+              alt="Logo"
+              className="h-10 w-10 rounded-full object-cover border-2 border-white shadow"
+            />
+            <div className="flex flex-col">
+              <h1 className="text-lg md:text-xl font-bold tracking-wide whitespace-nowrap">
+                ग्रामपंचायत आंबेवाडी
+              </h1>
+              <span className="text-sm md:text-base text-white/80">
+                ता. आटपाडी जि. सांगली
+              </span>
+            </div>
+          </div>
+
+          <div className="relative w-full">
+            <button
+              id="navbar-toggle"
+              className="md:hidden flex flex-col justify-center items-center w-10 h-10 absolute right-4 top-1/2 -translate-y-1/2 z-50"
+              onClick={() => {
+                const menu = document.getElementById("navbar-menu");
+                const toggle = document.getElementById("navbar-toggle");
+                if (menu.classList.contains("hidden")) {
+                  menu.classList.remove("hidden");
+                  toggle.classList.add("hidden");
+                }
+              }}
+              aria-label="Open menu"
+            >
+              <span className="block w-7 h-0.5 bg-white mb-1 rounded"></span>
+              <span className="block w-7 h-0.5 bg-white mb-1 rounded"></span>
+              <span className="block w-7 h-0.5 bg-white rounded"></span>
+            </button>
+            <div
+              id="navbar-menu"
+              className="hidden md:flex gap-8 text-base font-semibold items-center fixed md:static left-0 top-16 w-full bg-green-700 md:bg-transparent rounded-b shadow-2xl md:shadow-none p-6 md:p-0 z-50"
+            >
+              {/* Cross button for mobile nav */}
+              <button
+                className="absolute right-4 top-4 text-white text-2xl md:hidden"
+                aria-label="Close menu"
+                onClick={() => {
+                  const menu = document.getElementById("navbar-menu");
+                  const toggle = document.getElementById("navbar-toggle");
+                  menu.classList.add("hidden");
+                  toggle.classList.remove("hidden");
+                }}
+              >
+                ×
+              </button>
+              <div className="flex flex-col md:flex-row w-full items-start md:items-center justify-start md:justify-end gap-6 md:gap-8 mt-8 md:mt-0">
+                <Link to="news-section" smooth duration={500} className="cursor-pointer text-gray-300 hover:text-green-300">बातम्या</Link>
+                <Link to="devworks-section" smooth duration={500} className="cursor-pointer text-gray-300 hover:text-green-300">विकास कामे</Link>
+                <Link to="exec-section" smooth duration={500} className="cursor-pointer text-gray-300 hover:text-green-300">कार्यकारिणी</Link>
+                <button
+                  className="cursor-pointer text-gray-300 hover:text-green-300 text-base font-semibold bg-transparent border-none p-0 m-0"
+                  onClick={() => setQrModalOpen(true)}
+                  style={{ fontWeight: "inherit" }}
+                >
+                  कर
+                </button>
+                <button
+                  onClick={() => {
+                    localStorage.removeItem("adminToken");
+                    window.location.href = "/login";
+                  }}
+                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded shadow font-bold transition"
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
 
       {/* MAIN */}
       <main className="pt-24 min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 p-6">
@@ -243,7 +392,7 @@ export default function AdminDashboard() {
               गाव कार्यकारिणी व्यवस्थापन
             </h2>
 
-            {/* Sarpanch, Upsarpanch, Members */}
+            {/* Members */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               <Card
                 title="सरपंच"
@@ -257,12 +406,12 @@ export default function AdminDashboard() {
               />
               {members.map(m => (
                 <Card
-                  key={m._id}
+                  key={m.id}
                   title="सदस्य"
                   data={m}
-                  onChange={(k, v) => updateMember(m._id, k, v)}
+                  onChange={(k, v) => updateMember(m.id, k, v)}
                   allowRemove={members.length > 1}
-                  onRemove={() => removeMember(m._id)}
+                  onRemove={() => removeMember(m.id)}
                 />
               ))}
             </div>
@@ -283,10 +432,10 @@ export default function AdminDashboard() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {officers.map(o => (
                 <Card
-                  key={o._id}
+                  key={o.id}
                   title={o.role}
                   data={o}
-                  onChange={(k, v) => updateOfficer(o._id, k, v)}
+                  onChange={(k, v) => updateOfficer(o.id, k, v)}
                 />
               ))}
             </div>
@@ -295,9 +444,7 @@ export default function AdminDashboard() {
             <div className="mt-10 flex justify-center">
               <button
                 type="button"
-                className={`bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded shadow w-full max-w-md text-xl ${
-                  saving ? "opacity-60 cursor-not-allowed" : ""
-                }`}
+                className={`bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded shadow w-full max-w-md text-xl ${saving ? "opacity-60 cursor-not-allowed" : ""}`}
                 onClick={handleSubmit}
                 disabled={saving}
               >
@@ -312,3 +459,10 @@ export default function AdminDashboard() {
     </>
   );
 }
+
+
+
+
+
+
+
