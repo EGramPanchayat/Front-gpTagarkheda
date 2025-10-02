@@ -304,7 +304,7 @@ export default function AdminDashboard() {
             />
             <div className="flex flex-col">
               <h1 className="text-lg md:text-xl font-bold tracking-wide whitespace-nowrap">
-                ग्रामपंचायत आंबेवाडी
+                ग्रामपंचायत गोमेवाडी 
               </h1>
               <span className="text-sm md:text-base text-white/80">
                 ता. आटपाडी जि. सांगली
