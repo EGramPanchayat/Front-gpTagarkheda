@@ -1,3 +1,4 @@
+// AdminDashboard.jsx
 import React, { useState, useEffect, memo, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 import axioesInstance from "../utils/axioesInstance";
@@ -10,7 +11,7 @@ import { Link } from "react-scroll";
 
 // ---------- Helpers ----------
 const newMember = (data = {}) => ({
-  id: data.id || uuidv4(),
+  _id: data._id || uuidv4(), // ✅ use _id consistently
   name: data.name || "",
   mobile: data.mobile || "",
   image: null,
@@ -19,7 +20,7 @@ const newMember = (data = {}) => ({
 
 const newOfficer = (role, data = {}) => ({
   role,
-  id: data.id || uuidv4(),
+  _id: data._id || uuidv4(), // ✅ use _id consistently
   name: data.name || "",
   mobile: data.mobile || "",
   image: null,
@@ -32,14 +33,11 @@ const Card = memo(function Card({ title, data, onChange, allowRemove, onRemove }
 
   const handleImageChange = (file) => {
     if (file) {
-      // cleanup old preview URL
       if (previewRef.current) {
         URL.revokeObjectURL(previewRef.current);
       }
       const preview = URL.createObjectURL(file);
       previewRef.current = preview;
-
-      // update both file and preview
       onChange("image", file);
       onChange("imageUrl", preview);
     }
@@ -56,8 +54,6 @@ const Card = memo(function Card({ title, data, onChange, allowRemove, onRemove }
   return (
     <div className="flex flex-col items-center bg-white p-4 sm:p-6 rounded-2xl shadow w-full max-w-xs sm:w-64 text-center mx-auto">
       <h4 className="font-bold text-lg mb-3">{title}</h4>
-
-      {/* Circle image preview */}
       <div className="relative mb-3">
         <div className="h-24 w-24 rounded-full overflow-hidden bg-green-100 flex items-center justify-center">
           {data.imageUrl ? (
@@ -67,20 +63,14 @@ const Card = memo(function Card({ title, data, onChange, allowRemove, onRemove }
           )}
         </div>
       </div>
-
-      {/* Name input */}
       <input
         placeholder="नाव"
         value={data.name}
         onChange={(e) => onChange("name", e.target.value)}
         className="border border-green-600 p-2 rounded w-full mb-2 text-left"
       />
-
-      {/* Mobile input */}
       <div className="relative w-full mb-3">
-        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 select-none">
-          +91
-        </span>
+        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 select-none">+91</span>
         <input
           type="tel"
           placeholder="मोबाईल"
@@ -90,8 +80,6 @@ const Card = memo(function Card({ title, data, onChange, allowRemove, onRemove }
           maxLength={10}
         />
       </div>
-
-      {/* Upload button */}
       <label className="cursor-pointer bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow font-semibold">
         Image
         <input
@@ -101,7 +89,6 @@ const Card = memo(function Card({ title, data, onChange, allowRemove, onRemove }
           onChange={(e) => handleImageChange(e.target.files[0])}
         />
       </label>
-
       {allowRemove && (
         <button
           type="button"
@@ -142,35 +129,17 @@ export default function AdminDashboard() {
           imageUrl: data.upsarpanch?.image || "",
         });
         setMembers((data.members || []).map((m) => newMember(m)));
-
-        const defaultRoles = [
-          "तलाठी",
-          "ग्रामसेवक",
-          "कृषी अधिकारी",
-          "डेटा ऑपरेटर",
-          "पाणीपुरवठा कर्मचारी",
-          "लिपिक",
-          "शिपाई",
-        ];
+        const defaultRoles = ["तलाठी","ग्रामसेवक","कृषी अधिकारी","डेटा ऑपरेटर","पाणीपुरवठा कर्मचारी","लिपिक","शिपाई"];
         const existing = data.staff?.officers || [];
-        setOfficers(
-          defaultRoles.map((role) => {
-            const found = existing.find((o) => o.role === role) || {};
-            return newOfficer(role, found);
-          })
-        );
+        setOfficers(defaultRoles.map((role) => {
+          const found = existing.find((o) => o.role === role) || {};
+          return newOfficer(role, found);
+        }));
       } catch {
         setMembers([newMember()]);
         setOfficers(
-          [
-            "तलाठी",
-            "ग्रामसेवक",
-            "कृषी अधिकारी",
-            "डेटा ऑपरेटर",
-            "पाणीपुरवठा कर्मचारी",
-            "लिपिक",
-            "शिपाई",
-          ].map((r) => newOfficer(r))
+          ["तलाठी","ग्रामसेवक","कृषी अधिकारी","डेटा ऑपरेटर","पाणीपुरवठा कर्मचारी","लिपिक","शिपाई"]
+          .map((r) => newOfficer(r))
         );
       } finally {
         setLoading(false);
@@ -180,15 +149,15 @@ export default function AdminDashboard() {
   }, []);
 
   // ---------- Handlers ----------
-  const updateMember = (id, key, val) =>
-    setMembers((ms) => ms.map((m) => (m.id === id ? { ...m, [key]: val } : m)));
+  const updateMember = (_id, key, val) =>
+    setMembers((ms) => ms.map((m) => (m._id === _id ? { ...m, [key]: val } : m)));
 
   const addMember = () => setMembers((ms) => [...ms, newMember()]);
 
-  const removeMember = (id) => setMembers((ms) => ms.filter((m) => m.id !== id));
+  const removeMember = (_id) => setMembers((ms) => ms.filter((m) => m._id !== _id));
 
-  const updateOfficer = (id, key, val) =>
-    setOfficers((os) => os.map((o) => (o.id === id ? { ...o, [key]: val } : o)));
+  const updateOfficer = (_id, key, val) =>
+    setOfficers((os) => os.map((o) => (o._id === _id ? { ...o, [key]: val } : o)));
 
   const validate = () => {
     const ten = /^\d{10}$/;
@@ -223,18 +192,18 @@ export default function AdminDashboard() {
     if (upsarpanch.image) fd.append("upsarpanch", upsarpanch.image);
 
     members.forEach((m, idx) => {
-      fd.append(`members[${idx}][id]`, m.id);
+      fd.append(`members[${idx}][_id]`, m._id);
       fd.append(`members[${idx}][name]`, m.name);
       fd.append(`members[${idx}][mobile]`, m.mobile);
-      if (m.image) fd.append(`memberImages[${m.id}]`, m.image);
+      if (m.image) fd.append(`memberImages[${m._id}]`, m.image);
     });
 
     officers.forEach((o, idx) => {
-      fd.append(`staff[${idx}][id]`, o.id);
+      fd.append(`staff[${idx}][_id]`, o._id);
       fd.append(`staff[${idx}][role]`, o.role);
       fd.append(`staff[${idx}][name]`, o.name);
       fd.append(`staff[${idx}][mobile]`, o.mobile);
-      if (o.image) fd.append(`officerImages[${o.id}]`, o.image);
+      if (o.image) fd.append(`officerImages[${o._id}]`, o.image);
     });
 
     try {
@@ -254,23 +223,15 @@ export default function AdminDashboard() {
   return (
     <>
       <QRUploadModal open={qrModalOpen} onClose={() => setQrModalOpen(false)} />
-      {/* NAVBAR */}
       <nav className="bg-green-700 text-white shadow-md fixed top-0 left-0 right-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img
-              src="/images/satyamev.jpg"
-              alt="Logo"
-              className="h-10 w-10 rounded-full object-cover border-2 border-white shadow"
-            />
+            <img src="/images/satyamev.jpg" alt="Logo" className="h-10 w-10 rounded-full object-cover border-2 border-white shadow" />
             <div className="flex flex-col">
-              <h1 className="text-lg md:text-xl font-bold tracking-wide whitespace-nowrap">
-                ग्रामपंचायत गोमेवाडी
-              </h1>
+              <h1 className="text-lg md:text-xl font-bold tracking-wide whitespace-nowrap">ग्रामपंचायत गोमेवाडी</h1>
               <span className="text-sm md:text-base text-white/80">ता. आटपाडी जि. सांगली</span>
             </div>
           </div>
-
           <div className="relative w-full">
             <button
               id="navbar-toggle"
@@ -306,36 +267,10 @@ export default function AdminDashboard() {
                 ×
               </button>
               <div className="flex flex-col md:flex-row w-full items-start md:items-center justify-start md:justify-end gap-6 md:gap-8 mt-8 md:mt-0">
-                <Link
-                  to="news-section"
-                  smooth
-                  duration={500}
-                  className="cursor-pointer text-gray-300 hover:text-green-300"
-                >
-                  बातम्या
-                </Link>
-                <Link
-                  to="devworks-section"
-                  smooth
-                  duration={500}
-                  className="cursor-pointer text-gray-300 hover:text-green-300"
-                >
-                  विकास कामे
-                </Link>
-                <Link
-                  to="exec-section"
-                  smooth
-                  duration={500}
-                  className="cursor-pointer text-gray-300 hover:text-green-300"
-                >
-                  कार्यकारिणी
-                </Link>
-                <button
-                  className="cursor-pointer text-gray-300 hover:text-green-300 text-base font-semibold bg-transparent border-none p-0 m-0"
-                  onClick={() => setQrModalOpen(true)}
-                >
-                  कर
-                </button>
+                <Link to="news-section" smooth duration={500} className="cursor-pointer text-gray-300 hover:text-green-300">बातम्या</Link>
+                <Link to="devworks-section" smooth duration={500} className="cursor-pointer text-gray-300 hover:text-green-300">विकास कामे</Link>
+                <Link to="exec-section" smooth duration={500} className="cursor-pointer text-gray-300 hover:text-green-300">कार्यकारिणी</Link>
+                <button className="cursor-pointer text-gray-300 hover:text-green-300 text-base font-semibold bg-transparent border-none p-0 m-0" onClick={() => setQrModalOpen(true)}>कर</button>
                 <button
                   onClick={() => {
                     localStorage.removeItem("adminToken");
@@ -351,7 +286,6 @@ export default function AdminDashboard() {
         </div>
       </nav>
 
-      {/* MAIN */}
       <main className="pt-24 min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 p-6">
         <section id="news-section" className="max-w-7xl mx-auto mb-12">
           <NewsUpload />
@@ -359,72 +293,38 @@ export default function AdminDashboard() {
         <section id="devworks-section" className="max-w-7xl mx-auto mb-12">
           <DevelopementWorkAdmin />
         </section>
-
-        {/* EXEC BOARD */}
         <section id="exec-section" className="max-w-7xl mx-auto mb-12">
-          <form
-            onSubmit={handleSubmit}
-            className="bg-gray-50 p-10 rounded-2xl shadow-2xl space-y-12 border border-green-200"
-          >
-            <h2 className="text-3xl font-extrabold text-green-700 border-b pb-4 text-center">
-              गाव कार्यकारिणी व्यवस्थापन
-            </h2>
-
-            {/* Sarpanch + Upsarpanch + Members */}
+          <form onSubmit={handleSubmit} className="bg-gray-50 p-10 rounded-2xl shadow-2xl space-y-12 border border-green-200">
+            <h2 className="text-3xl font-extrabold text-green-700 border-b pb-4 text-center">गाव कार्यकारिणी व्यवस्थापन</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              <Card
-                title="सरपंच"
-                data={sarpanch}
-                onChange={(k, v) => setSarpanch((s) => ({ ...s, [k]: v }))}
-              />
-              <Card
-                title="उपसरपंच"
-                data={upsarpanch}
-                onChange={(k, v) => setUpsarpanch((s) => ({ ...s, [k]: v }))}
-              />
+              <Card title="सरपंच" data={sarpanch} onChange={(k, v) => setSarpanch((s) => ({ ...s, [k]: v }))} />
+              <Card title="उपसरपंच" data={upsarpanch} onChange={(k, v) => setUpsarpanch((s) => ({ ...s, [k]: v }))} />
               {members.map((m) => (
                 <Card
-                  key={m.id}
+                  key={m._id}
                   title="सदस्य"
                   data={m}
-                  onChange={(k, v) => updateMember(m.id, k, v)}
+                  onChange={(k, v) => updateMember(m._id, k, v)}
                   allowRemove={members.length > 1}
-                  onRemove={() => removeMember(m.id)}
+                  onRemove={() => removeMember(m._id)}
                 />
               ))}
             </div>
             <div className="text-center mt-4">
-              <button
-                type="button"
-                onClick={addMember}
-                className="bg-green-700 text-white px-4 py-2 rounded shadow"
-              >
-                नवीन सदस्य जोडा
-              </button>
+              <button type="button" onClick={addMember} className="bg-green-700 text-white px-4 py-2 rounded shadow">नवीन सदस्य जोडा</button>
             </div>
 
-            {/* Officers */}
-            <h3 className="text-3xl font-bold mb-4 border-t pt-10 text-green-700 text-center">
-              अधिकारी
-            </h3>
+            <h3 className="text-3xl font-bold mb-4 border-t pt-10 text-green-700 text-center">अधिकारी</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {officers.map((o) => (
-                <Card
-                  key={o.id}
-                  title={o.role}
-                  data={o}
-                  onChange={(k, v) => updateOfficer(o.id, k, v)}
-                />
+                <Card key={o._id} title={o.role} data={o} onChange={(k, v) => updateOfficer(o._id, k, v)} />
               ))}
             </div>
 
-            {/* Save button */}
             <div className="mt-10 flex justify-center">
               <button
                 type="button"
-                className={`bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded shadow w-full max-w-md text-xl ${
-                  saving ? "opacity-60 cursor-not-allowed" : ""
-                }`}
+                className={`bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded shadow w-full max-w-md text-xl ${saving ? "opacity-60 cursor-not-allowed" : ""}`}
                 onClick={handleSubmit}
                 disabled={saving}
               >
@@ -434,7 +334,6 @@ export default function AdminDashboard() {
           </form>
         </section>
       </main>
-
       <ToastContainer position="top-right" autoClose={4000} theme="colored" />
     </>
   );
