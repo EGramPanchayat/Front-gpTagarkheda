@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from "react";
+import React, { useState, useEffect, memo, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 import axioesInstance from "../utils/axioesInstance";
 import { toast, ToastContainer } from "react-toastify";
@@ -7,8 +7,6 @@ import DevelopementWorkAdmin from "../AdminComponents/DevelopementWorkAdmin";
 import NewsUpload from "../AdminComponents/NewsUpload";
 import QRUploadModal from "../AdminComponents/QRUploadModal";
 import { Link } from "react-scroll";
-
-
 
 // ---------- Helpers ----------
 const newMember = (data = {}) => ({
@@ -30,9 +28,36 @@ const newOfficer = (role, data = {}) => ({
 
 // ---------- Memoized Card ----------
 const Card = memo(function Card({ title, data, onChange, allowRemove, onRemove }) {
+  const previewRef = useRef(null);
+
+  const handleImageChange = (file) => {
+    if (file) {
+      // cleanup old preview URL
+      if (previewRef.current) {
+        URL.revokeObjectURL(previewRef.current);
+      }
+      const preview = URL.createObjectURL(file);
+      previewRef.current = preview;
+
+      // update both file and preview
+      onChange("image", file);
+      onChange("imageUrl", preview);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (previewRef.current) {
+        URL.revokeObjectURL(previewRef.current);
+      }
+    };
+  }, []);
+
   return (
     <div className="flex flex-col items-center bg-white p-4 sm:p-6 rounded-2xl shadow w-full max-w-xs sm:w-64 text-center mx-auto">
       <h4 className="font-bold text-lg mb-3">{title}</h4>
+
+      {/* Circle image preview */}
       <div className="relative mb-3">
         <div className="h-24 w-24 rounded-full overflow-hidden bg-green-100 flex items-center justify-center">
           {data.imageUrl ? (
@@ -42,32 +67,41 @@ const Card = memo(function Card({ title, data, onChange, allowRemove, onRemove }
           )}
         </div>
       </div>
+
+      {/* Name input */}
       <input
         placeholder="नाव"
         value={data.name}
-        onChange={e => onChange("name", e.target.value)}
+        onChange={(e) => onChange("name", e.target.value)}
         className="border border-green-600 p-2 rounded w-full mb-2 text-left"
       />
+
+      {/* Mobile input */}
       <div className="relative w-full mb-3">
-        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 select-none">+91</span>
+        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 select-none">
+          +91
+        </span>
         <input
           type="tel"
           placeholder="मोबाईल"
           value={data.mobile}
-          onChange={e => onChange("mobile", e.target.value.replace(/[^\d]/g, ""))}
+          onChange={(e) => onChange("mobile", e.target.value.replace(/[^\d]/g, ""))}
           className="border border-green-600 p-2 pl-12 rounded w-full text-left"
           maxLength={10}
         />
       </div>
+
+      {/* Upload button */}
       <label className="cursor-pointer bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow font-semibold">
         Image
         <input
           type="file"
           accept="image/*"
           className="hidden"
-          onChange={e => onChange("image", e.target.files[0])}
+          onChange={(e) => handleImageChange(e.target.files[0])}
         />
       </label>
+
       {allowRemove && (
         <button
           type="button"
@@ -81,6 +115,7 @@ const Card = memo(function Card({ title, data, onChange, allowRemove, onRemove }
   );
 });
 
+// ---------- Main Admin Dashboard ----------
 export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -106,7 +141,7 @@ export default function AdminDashboard() {
           image: null,
           imageUrl: data.upsarpanch?.image || "",
         });
-        setMembers((data.members || []).map(m => newMember(m)));
+        setMembers((data.members || []).map((m) => newMember(m)));
 
         const defaultRoles = [
           "तलाठी",
@@ -119,17 +154,23 @@ export default function AdminDashboard() {
         ];
         const existing = data.staff?.officers || [];
         setOfficers(
-          defaultRoles.map(role => {
-            const found = existing.find(o => o.role === role) || {};
+          defaultRoles.map((role) => {
+            const found = existing.find((o) => o.role === role) || {};
             return newOfficer(role, found);
           })
         );
       } catch {
         setMembers([newMember()]);
         setOfficers(
-          ["तलाठी", "ग्रामसेवक", "कृषी अधिकारी", "डेटा ऑपरेटर", "पाणीपुरवठा कर्मचारी", "लिपिक", "शिपाई"].map(r =>
-            newOfficer(r)
-          )
+          [
+            "तलाठी",
+            "ग्रामसेवक",
+            "कृषी अधिकारी",
+            "डेटा ऑपरेटर",
+            "पाणीपुरवठा कर्मचारी",
+            "लिपिक",
+            "शिपाई",
+          ].map((r) => newOfficer(r))
         );
       } finally {
         setLoading(false);
@@ -140,14 +181,14 @@ export default function AdminDashboard() {
 
   // ---------- Handlers ----------
   const updateMember = (id, key, val) =>
-    setMembers(ms => ms.map(m => (m.id === id ? { ...m, [key]: val } : m)));
+    setMembers((ms) => ms.map((m) => (m.id === id ? { ...m, [key]: val } : m)));
 
-  const addMember = () => setMembers(ms => [...ms, newMember()]);
+  const addMember = () => setMembers((ms) => [...ms, newMember()]);
 
-  const removeMember = id => setMembers(ms => ms.filter(m => m.id !== id));
+  const removeMember = (id) => setMembers((ms) => ms.filter((m) => m.id !== id));
 
   const updateOfficer = (id, key, val) =>
-    setOfficers(os => os.map(o => (o.id === id ? { ...o, [key]: val } : o)));
+    setOfficers((os) => os.map((o) => (o.id === id ? { ...o, [key]: val } : o)));
 
   const validate = () => {
     const ten = /^\d{10}$/;
@@ -167,7 +208,7 @@ export default function AdminDashboard() {
     return null;
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const msg = validate();
     if (msg) return toast.error(msg);
@@ -217,20 +258,18 @@ export default function AdminDashboard() {
       <nav className="bg-green-700 text-white shadow-md fixed top-0 left-0 right-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-                <img
-                  src="/images/satyamev.jpg"
-                  alt="Logo"
-                  className="h-10 w-10 rounded-full object-cover border-2 border-white shadow"
-                />
-                <div className="flex flex-col">
-                  <h1 className="text-lg md:text-xl font-bold tracking-wide whitespace-nowrap">
-                    ग्रामपंचायत गोमेवाडी 
-                  </h1>
-                  <span className="text-sm md:text-base text-white/80">
-                    ता. आटपाडी जि. सांगली
-                  </span>
-                </div>
-              </div>
+            <img
+              src="/images/satyamev.jpg"
+              alt="Logo"
+              className="h-10 w-10 rounded-full object-cover border-2 border-white shadow"
+            />
+            <div className="flex flex-col">
+              <h1 className="text-lg md:text-xl font-bold tracking-wide whitespace-nowrap">
+                ग्रामपंचायत गोमेवाडी
+              </h1>
+              <span className="text-sm md:text-base text-white/80">ता. आटपाडी जि. सांगली</span>
+            </div>
+          </div>
 
           <div className="relative w-full">
             <button
@@ -254,7 +293,6 @@ export default function AdminDashboard() {
               id="navbar-menu"
               className="hidden md:flex gap-8 text-base font-semibold items-center fixed md:static left-0 top-16 w-full bg-green-700 md:bg-transparent rounded-b shadow-2xl md:shadow-none p-6 md:p-0 z-50"
             >
-              {/* Cross button for mobile nav */}
               <button
                 className="absolute right-4 top-4 text-white text-2xl md:hidden"
                 aria-label="Close menu"
@@ -268,13 +306,33 @@ export default function AdminDashboard() {
                 ×
               </button>
               <div className="flex flex-col md:flex-row w-full items-start md:items-center justify-start md:justify-end gap-6 md:gap-8 mt-8 md:mt-0">
-                <Link to="news-section" smooth duration={500} className="cursor-pointer text-gray-300 hover:text-green-300">बातम्या</Link>
-                <Link to="devworks-section" smooth duration={500} className="cursor-pointer text-gray-300 hover:text-green-300">विकास कामे</Link>
-                <Link to="exec-section" smooth duration={500} className="cursor-pointer text-gray-300 hover:text-green-300">कार्यकारिणी</Link>
+                <Link
+                  to="news-section"
+                  smooth
+                  duration={500}
+                  className="cursor-pointer text-gray-300 hover:text-green-300"
+                >
+                  बातम्या
+                </Link>
+                <Link
+                  to="devworks-section"
+                  smooth
+                  duration={500}
+                  className="cursor-pointer text-gray-300 hover:text-green-300"
+                >
+                  विकास कामे
+                </Link>
+                <Link
+                  to="exec-section"
+                  smooth
+                  duration={500}
+                  className="cursor-pointer text-gray-300 hover:text-green-300"
+                >
+                  कार्यकारिणी
+                </Link>
                 <button
                   className="cursor-pointer text-gray-300 hover:text-green-300 text-base font-semibold bg-transparent border-none p-0 m-0"
                   onClick={() => setQrModalOpen(true)}
-                  style={{ fontWeight: "inherit" }}
                 >
                   कर
                 </button>
@@ -303,7 +361,6 @@ export default function AdminDashboard() {
         </section>
 
         {/* EXEC BOARD */}
-        {/* EXEC BOARD */}
         <section id="exec-section" className="max-w-7xl mx-auto mb-12">
           <form
             onSubmit={handleSubmit}
@@ -313,19 +370,19 @@ export default function AdminDashboard() {
               गाव कार्यकारिणी व्यवस्थापन
             </h2>
 
-      
+            {/* Sarpanch + Upsarpanch + Members */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-               <Card
+              <Card
                 title="सरपंच"
                 data={sarpanch}
-                onChange={(k, v) => setSarpanch(s => ({ ...s, [k]: v }))}
+                onChange={(k, v) => setSarpanch((s) => ({ ...s, [k]: v }))}
               />
               <Card
                 title="उपसरपंच"
                 data={upsarpanch}
-                onChange={(k, v) => setUpsarpanch(s => ({ ...s, [k]: v }))}
+                onChange={(k, v) => setUpsarpanch((s) => ({ ...s, [k]: v }))}
               />
-              {members.map(m => (
+              {members.map((m) => (
                 <Card
                   key={m.id}
                   title="सदस्य"
@@ -351,7 +408,7 @@ export default function AdminDashboard() {
               अधिकारी
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {officers.map(o => (
+              {officers.map((o) => (
                 <Card
                   key={o.id}
                   title={o.role}
@@ -360,20 +417,22 @@ export default function AdminDashboard() {
                 />
               ))}
             </div>
-              {/* Save Button at the bottom */}
-              <div className="mt-10 flex justify-center">
-                <button
-                  type="button"
-                  className={`bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded shadow w-full max-w-md text-xl ${saving ? 'opacity-60 cursor-not-allowed' : ''}`}
-                  onClick={handleSubmit}
-                  disabled={saving}
-                >
-                  {saving ? 'Saving...' : 'Save'}
-                </button>
-              </div>
+
+            {/* Save button */}
+            <div className="mt-10 flex justify-center">
+              <button
+                type="button"
+                className={`bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded shadow w-full max-w-md text-xl ${
+                  saving ? "opacity-60 cursor-not-allowed" : ""
+                }`}
+                onClick={handleSubmit}
+                disabled={saving}
+              >
+                {saving ? "Saving..." : "Save"}
+              </button>
+            </div>
           </form>
         </section>
-
       </main>
 
       <ToastContainer position="top-right" autoClose={4000} theme="colored" />
