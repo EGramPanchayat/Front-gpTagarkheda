@@ -30,24 +30,40 @@ const ExecutiveBoard = () => {
   // Handle file input for preview
   const handleImageChange = (e, role, index = null) => {
     const file = e.target.files[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
+    if (!file) return;
 
+    const url = URL.createObjectURL(file);
+
+    setPreview((prev) => {
       if (role === "sarpanch" || role === "upsarpanch") {
-        setPreview((prev) => ({ ...prev, [role]: url }));
+        return { ...prev, [role]: url };
       } else if (role === "member") {
-        setPreview((prev) => ({
+        return {
           ...prev,
           members: { ...prev.members, [index]: url }
-        }));
+        };
       } else if (role === "officer") {
-        setPreview((prev) => ({
+        return {
           ...prev,
           officers: { ...prev.officers, [index]: url }
-        }));
+        };
       }
-    }
+      return prev;
+    });
   };
+
+  // Cleanup URLs when component unmounts
+  useEffect(() => {
+    return () => {
+      Object.values(preview).forEach((val) => {
+        if (typeof val === "string") {
+          URL.revokeObjectURL(val);
+        } else if (val && typeof val === "object") {
+          Object.values(val).forEach((u) => u && URL.revokeObjectURL(u));
+        }
+      });
+    };
+  }, [preview]);
 
   if (loading)
     return (
@@ -80,7 +96,7 @@ const ExecutiveBoard = () => {
           {/* Sarpanch and Upsarpanch */}
           <div className="flex flex-col md:flex-row gap-8 mb-10 justify-center items-center">
             {/* Sarpanch */}
-            <div className="flex flex-col items-center text-center bg-green-900 rounded-xl shadow-xl p-5 w-72 md:w-64 border-b-4 border-green-500 hover:translate-x-1 transition-transform duration-300 ease-in-out">
+            <div className="flex flex-col items-center text-center bg-green-900 rounded-xl shadow-xl p-5 w-72 md:w-64 border-b-4 border-green-500 hover:scale-105 transition-transform duration-300 ease-in-out">
               <span className="bg-green-700 text-white text-s font-bold px-3 py-1 rounded-full mb-2">
                 सरपंच
               </span>
@@ -94,6 +110,7 @@ const ExecutiveBoard = () => {
                 className="w-24 h-24 rounded-full object-cover mb-3 mt-4"
               />
               <input
+                key="sarpanch-file"
                 type="file"
                 accept="image/*"
                 className="mt-2 text-xs text-white"
@@ -102,11 +119,13 @@ const ExecutiveBoard = () => {
               <h6 className="text-base font-normal mb-1 text-white">
                 {board.sarpanch?.name}
               </h6>
-              <p className="text-green-200 text-sm mb-1">+91 {board.sarpanch?.mobile}</p>
+              <p className="text-green-200 text-sm mb-1">
+                +91 {board.sarpanch?.mobile}
+              </p>
             </div>
 
             {/* Upsarpanch */}
-            <div className="flex flex-col items-center text-center bg-green-900 rounded-xl shadow-xl p-5 w-72 md:w-64 border-b-4 border-green-500 hover:translate-x-1 transition-transform duration-300 ease-in-out">
+            <div className="flex flex-col items-center text-center bg-green-900 rounded-xl shadow-xl p-5 w-72 md:w-64 border-b-4 border-green-500 hover:scale-105 transition-transform duration-300 ease-in-out">
               <span className="bg-green-700 text-white text-s font-bold px-3 py-1 rounded-full mb-2">
                 उपसरपंच
               </span>
@@ -120,6 +139,7 @@ const ExecutiveBoard = () => {
                 className="w-24 h-24 rounded-full object-cover mb-3 mt-4"
               />
               <input
+                key="upsarpanch-file"
                 type="file"
                 accept="image/*"
                 className="mt-2 text-xs text-white"
@@ -128,7 +148,9 @@ const ExecutiveBoard = () => {
               <h6 className="text-base font-normal mb-1 text-white">
                 {board.upsarpanch?.name}
               </h6>
-              <p className="text-green-200 text-sm mb-1">+91 {board.upsarpanch?.mobile}</p>
+              <p className="text-green-200 text-sm mb-1">
+                +91 {board.upsarpanch?.mobile}
+              </p>
             </div>
           </div>
 
@@ -138,17 +160,22 @@ const ExecutiveBoard = () => {
               {board.members?.map((m, idx) => (
                 <div
                   key={m._id || idx}
-                  className="flex flex-col items-center text-center bg-white rounded-xl shadow-xl p-3 w-70 md:w-44 sm:w-48 border-1 border-orange-500 hover:translate-x-1 transition-transform duration-300 ease-in-out"
+                  className="flex flex-col items-center text-center bg-white rounded-xl shadow-xl p-3 w-70 md:w-44 sm:w-48 border border-orange-500 hover:scale-105 transition-transform duration-300 ease-in-out"
                 >
                   <span className="text-green-700 text-[1.1rem] font-bold px-3 py-1 rounded-full mb-2">
                     सदस्य
                   </span>
                   <img
-                    src={preview.members[idx] || m.image || "/images/profile.png"}
+                    src={
+                      preview.members[idx] ||
+                      m.image ||
+                      "/images/profile.png"
+                    }
                     alt={m.name}
                     className="w-24 h-24 rounded-full object-cover mb-3"
                   />
                   <input
+                    key={`member-file-${idx}`}
                     type="file"
                     accept="image/*"
                     className="mt-2 text-xs"
