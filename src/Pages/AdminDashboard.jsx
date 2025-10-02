@@ -9,7 +9,7 @@ import { Link } from "react-scroll";
 
 // ---------- Helpers ----------
 const newMember = (data = {}) => ({
-  _id: data._id || null,   // use mongoose _id
+  _id: data._id || `local-${Date.now()}-${Math.random()}`,
   name: data.name || "",
   mobile: data.mobile || "",
   image: null,
@@ -18,7 +18,7 @@ const newMember = (data = {}) => ({
 
 const newOfficer = (role, data = {}) => ({
   role,
-  _id: data._id || null,   // use mongoose _id
+  _id: data._id || `local-${Date.now()}-${Math.random()}`,
   name: data.name || "",
   mobile: data.mobile || "",
   image: null,
@@ -190,14 +190,14 @@ export default function AdminDashboard() {
     if (upsarpanch.image) fd.append("upsarpanch", upsarpanch.image);
 
     members.forEach((m, idx) => {
-      if (m._id) fd.append(`members[${idx}][_id]`, m._id);  // send _id if exists
+      if (m._id && !String(m._id).startsWith("local-")) fd.append(`members[${idx}][_id]`, m._id); // only real _id
       fd.append(`members[${idx}][name]`, m.name);
       fd.append(`members[${idx}][mobile]`, m.mobile);
       if (m.image) fd.append(`memberImages[${idx}]`, m.image);
     });
 
     officers.forEach((o, idx) => {
-      if (o._id) fd.append(`staff[${idx}][_id]`, o._id);
+      if (o._id && !String(o._id).startsWith("local-")) fd.append(`staff[${idx}][_id]`, o._id);
       fd.append(`staff[${idx}][role]`, o.role);
       fd.append(`staff[${idx}][name]`, o.name);
       fd.append(`staff[${idx}][mobile]`, o.mobile);
@@ -337,7 +337,7 @@ export default function AdminDashboard() {
               />
               {members.map(m => (
                 <Card
-                  key={m._id || Math.random()}
+                  key={m._id}
                   title="सदस्य"
                   data={m}
                   onChange={(k, v) => updateMember(m._id, k, v)}
@@ -363,7 +363,7 @@ export default function AdminDashboard() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {officers.map(o => (
                 <Card
-                  key={o._id || o.role}
+                  key={o._id}
                   title={o.role}
                   data={o}
                   onChange={(k, v) => updateOfficer(o._id, k, v)}
