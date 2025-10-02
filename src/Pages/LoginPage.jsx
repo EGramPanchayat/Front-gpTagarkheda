@@ -52,7 +52,7 @@ export default function LoginCard() {
             alt="background"
             className="absolute inset-0 w-full h-full object-cover"
           />
-          <h1 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-2xl md:text-4xl font-extrabold text-green-200 drop-shadow-lg font-serif text-center">
+          <h1 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-2/11 text-2xl md:text-4xl font-extrabold text-white drop-shadow-lg font-serif text-center">
             ग्रामपंचायत गोमेवाडी
           </h1>
         </div>
