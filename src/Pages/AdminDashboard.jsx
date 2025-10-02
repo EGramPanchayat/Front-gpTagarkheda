@@ -1,4 +1,5 @@
 import React, { useState, useEffect, memo } from "react";
+import { v4 as uuidv4 } from "uuid";
 import axioesInstance from "../utils/axioesInstance";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -9,7 +10,7 @@ import { Link } from "react-scroll";
 
 // ---------- Helpers ----------
 const newMember = (data = {}) => ({
-  _id: data._id || `local-${Date.now()}-${Math.random()}`,
+  _id: data._id || uuidv4(),
   name: data.name || "",
   mobile: data.mobile || "",
   image: null,
@@ -18,7 +19,7 @@ const newMember = (data = {}) => ({
 
 const newOfficer = (role, data = {}) => ({
   role,
-  _id: data._id || `local-${Date.now()}-${Math.random()}`,
+  _id: data._id || uuidv4(),
   name: data.name || "",
   mobile: data.mobile || "",
   image: null,
@@ -143,17 +144,6 @@ export default function AdminDashboard() {
 
   const removeMember = _id => setMembers(ms => ms.filter(m => m._id !== _id));
 
-  // Remove member from backend and state
-  const handleRemoveMember = async (_id) => {
-    try {
-      await axioesInstance.delete(`/exboard-karyakari-mandal/member/${_id}`);
-      setMembers(ms => ms.filter(m => m._id !== _id));
-      toast.success("सदस्य यशस्वीरित्या हटविला गेला.");
-    } catch (err) {
-      toast.error("सदस्य हटवताना त्रुटी: " + (err.response?.data?.message || err.message));
-    }
-  };
-
   const updateOfficer = (_id, key, val) =>
     setOfficers(os => os.map(o => (o._id === _id ? { ...o, [key]: val } : o)));
 
@@ -190,18 +180,18 @@ export default function AdminDashboard() {
     if (upsarpanch.image) fd.append("upsarpanch", upsarpanch.image);
 
     members.forEach((m, idx) => {
-      if (m._id && !String(m._id).startsWith("local-")) fd.append(`members[${idx}][_id]`, m._id); // only real _id
+      fd.append(`members[${idx}][_id]`, m._id);
       fd.append(`members[${idx}][name]`, m.name);
       fd.append(`members[${idx}][mobile]`, m.mobile);
-      if (m.image) fd.append(`memberImages[${idx}]`, m.image);
+      if (m.image) fd.append(`memberImages[${m._id}]`, m.image);
     });
 
     officers.forEach((o, idx) => {
-      if (o._id && !String(o._id).startsWith("local-")) fd.append(`staff[${idx}][_id]`, o._id);
+      fd.append(`staff[${idx}][_id]`, o._id);
       fd.append(`staff[${idx}][role]`, o.role);
       fd.append(`staff[${idx}][name]`, o.name);
       fd.append(`staff[${idx}][mobile]`, o.mobile);
-      if (o.image) fd.append(`officerImages[${idx}]`, o.image);
+      if (o.image) fd.append(`officerImages[${o._id}]`, o.image);
     });
 
     try {
@@ -216,15 +206,12 @@ export default function AdminDashboard() {
     }
   };
 
-  if (loading) return <div className="p-6">Loading…</div>;
+  if (loading) return <div className="p-6">कार्यकारी मंडळ लोड होत आहे…</div>;
 
   return (
     <>
       <QRUploadModal open={qrModalOpen} onClose={() => setQrModalOpen(false)} />
-  
-     
-
-
+      {/* NAVBAR */}
       <nav className="bg-green-700 text-white shadow-md fixed top-0 left-0 right-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -235,7 +222,7 @@ export default function AdminDashboard() {
             />
             <div className="flex flex-col">
               <h1 className="text-lg md:text-xl font-bold tracking-wide whitespace-nowrap">
-                ग्रामपंचायत गोमेवाडी 
+                ग्रामपंचायत गोमेवाडी
               </h1>
               <span className="text-sm md:text-base text-white/80">
                 ता. आटपाडी जि. सांगली
@@ -323,7 +310,6 @@ export default function AdminDashboard() {
               गाव कार्यकारिणी व्यवस्थापन
             </h2>
 
-            {/* Members */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               <Card
                 title="सरपंच"
@@ -342,7 +328,7 @@ export default function AdminDashboard() {
                   data={m}
                   onChange={(k, v) => updateMember(m._id, k, v)}
                   allowRemove={members.length > 1}
-                  onRemove={() => handleRemoveMember(m._id)}
+                  onRemove={() => removeMember(m._id)}
                 />
               ))}
             </div>
@@ -370,12 +356,12 @@ export default function AdminDashboard() {
                 />
               ))}
             </div>
-
-            {/* Save Button */}
+            {/* Save Button at the bottom */}
             <div className="mt-10 flex justify-center">
               <button
-                type="submit"
+                type="button"
                 className={`bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded shadow w-full max-w-md text-xl ${saving ? "opacity-60 cursor-not-allowed" : ""}`}
+                onClick={handleSubmit}
                 disabled={saving}
               >
                 {saving ? "Saving..." : "Save"}
@@ -389,10 +375,3 @@ export default function AdminDashboard() {
     </>
   );
 }
-
-
-
-
-
-
-
