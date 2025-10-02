@@ -144,6 +144,17 @@ export default function AdminDashboard() {
 
   const removeMember = id => setMembers(ms => ms.filter(m => m.id !== id));
 
+  // Remove member from backend and state
+  const handleRemoveMember = async (id) => {
+    try {
+      await axioesInstance.delete(`/exboard-karyakari-mandal/member/${id}`);
+      setMembers(ms => ms.filter(m => m.id !== id));
+      toast.success("सदस्य यशस्वीरित्या हटविला गेला.");
+    } catch (err) {
+      toast.error("सदस्य हटवताना त्रुटी: " + (err.response?.data?.message || err.message));
+    }
+  };
+
   const updateOfficer = (id, key, val) =>
     setOfficers(os => os.map(o => (o.id === id ? { ...o, [key]: val } : o)));
 
@@ -411,7 +422,7 @@ export default function AdminDashboard() {
                   data={m}
                   onChange={(k, v) => updateMember(m.id, k, v)}
                   allowRemove={members.length > 1}
-                  onRemove={() => removeMember(m.id)}
+                  onRemove={() => handleRemoveMember(m.id)}
                 />
               ))}
             </div>
