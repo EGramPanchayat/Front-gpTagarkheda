@@ -15,7 +15,7 @@ const ContactSection = () => (
               </svg>
               पत्ता
             </h5>
-            <p className="text-gray-700 text-left">ग्रामपंचायत गोमेवाडी,<br/>तालुका आटपाडी,<br/>जिल्हा सांगली,<br/>महाराष्ट्र - 415 308.</p>
+            <p className="text-gray-700 text-left">ग्रामपंचायत गोमेवाडी,<br/>तालुका आटपाडी,<br/>जिल्हा सांगली,<br/>महाराष्ट्र - 415 306.</p>
           </div>
           <div className="bg-white rounded-xl shadow-lg p-6 flex flex-col items-start">
             <h5 className="text-xl font-extrabold mb-2 flex items-center gap-2 text-left">
