@@ -116,8 +116,8 @@ export default function AdminDashboard() {
         setMembers((data.members || []).map(m => ({ ...newMember(m), _id: m._id })));
 
         const defaultRoles = [
-          "तलाठी",
-          "ग्रामसेवक",
+          "ग्राम महसूल अधिकारी",
+          "ग्रामपंचायत अधिकारी",
           "कृषी अधिकारी",
           "डेटा ऑपरेटर",
           "पाणीपुरवठा कर्मचारी",
@@ -134,7 +134,7 @@ export default function AdminDashboard() {
       } catch {
         setMembers([newMember()]);
         setOfficers(
-          ["तलाठी", "ग्रामसेवक", "कृषी अधिकारी", "डेटा ऑपरेटर", "पाणीपुरवठा कर्मचारी", "लिपिक", "शिपाई"].map(r =>
+          ["ग्राम महसूल अधिकारी", "ग्रामपंचायत अधिकारी", "कृषी अधिकारी", "डेटा ऑपरेटर", "पाणीपुरवठा कर्मचारी", "लिपिक", "शिपाई"].map(r =>
             newOfficer(r)
           )
         );
