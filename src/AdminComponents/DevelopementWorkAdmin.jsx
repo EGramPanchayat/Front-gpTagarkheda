@@ -1,8 +1,66 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { toast } from "react-toastify";
 import axioesInstance from "../utils/axioesInstance";
 
 const blankWork = () => ({ title: "", description: "", image: null });
+
+const Card = memo(function Card({ title, data, onChange, allowRemove, onRemove }) {
+  return (
+    <div className="flex flex-col items-center bg-white p-4 sm:p-6 rounded-2xl shadow w-full max-w-xs sm:w-64 text-center mx-auto">
+      <h4 className="font-bold text-lg mb-3">{title}</h4>
+      <div className="relative mb-3">
+        <div className="h-48 w-full rounded-t-lg overflow-hidden bg-green-100 flex items-center justify-center">
+          {data.imageUrl ? (
+            <img src={data.imageUrl} alt={title} className="w-full h-48 object-cover" />
+          ) : (
+            <span className="text-gray-400">No Image</span>
+          )}
+        </div>
+      </div>
+      <input
+        placeholder="नाव"
+        value={data.name}
+        onChange={e => onChange("name", e.target.value)}
+        className="border border-green-600 p-2 rounded w-full mb-2 text-left"
+      />
+      <div className="relative w-full mb-3">
+        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 select-none">+91</span>
+        <input
+          type="tel"
+          placeholder="मोबाईल"
+          value={data.mobile}
+          onChange={e => onChange("mobile", e.target.value.replace(/[^\d]/g, ""))}
+          className="border border-green-600 p-2 pl-12 rounded w-full text-left"
+          maxLength={10}
+        />
+      </div>
+      <label className="cursor-pointer bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow font-semibold">
+        Image
+        <input
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={e => {
+            const file = e.target.files[0];
+            if (file) {
+              onChange("image", file);
+              onChange("imageUrl", URL.createObjectURL(file)); // instant preview
+            }
+          }}
+        />
+      </label>
+      {allowRemove && (
+        <button
+          type="button"
+          onClick={onRemove}
+          className="mt-3 bg-red-500 text-white px-3 py-1 rounded shadow"
+        >
+          हटवा
+        </button>
+      )}
+    </div>
+  );
+});
 
 const DevelopementWorkAdmin = () => {
   const [savedWorks, setSavedWorks] = useState([]);
@@ -135,7 +193,7 @@ const DevelopementWorkAdmin = () => {
                 <img
                   src={work.image.url}
                   alt={work.title}
-                  className="w-full h-40 object-cover  mb-2 rounded"
+                  className="w-full h-48 object-cover  mb-2 rounded"
                 />
               ) : (
                 <span className="material-icons text-gray-400 text-5xl mb-2">image</span>

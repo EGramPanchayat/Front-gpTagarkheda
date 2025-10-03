@@ -111,7 +111,7 @@ const ExecutiveBoard = () => {
               {board.members?.map((m, idx) => (
                 <div
                   key={m._id || idx}
-                  className="flex flex-col items-center text-center bg-white rounded-xl shadow-xl p-3 w-70 md:w-44 sm:w-48 border-1 border-orange-500 hover:translate-x-1 transition-transform duration-300 ease-in-out"
+                  className="flex flex-col items-center text-center bg-white rounded-xl shadow-xl p-3 w-70 md:w-44 sm:w-48 border-1 border-green-800 hover:translate-x-1 transition-transform duration-300 ease-in-out"
                 >
                   <span className="text-green-700 text-[1.1rem] font-bold px-3 py-1 rounded-full mb-2">
                     सदस्य

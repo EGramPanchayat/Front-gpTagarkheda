@@ -13,7 +13,7 @@ const ServicesSection = () => (
         <div className="space-y-4 sm:space-y-6 w-full">
           {/* Swachh Bharat Mission */}
           <div className="bg-white rounded-2xl shadow-md p-3 sm:p-6 w-full border-l-4 border-orange-400 hover:shadow-xl hover:-translate-y-1 transition" data-aos="fade-up" data-aos-delay="100">
-            <h5 className="text-base sm:text-lg md:text-xl font-medium mb-3 flex items-center gap-3">
+            <h5 className="text-base sm:text-lg md:text-xl font-bold mb-3 flex items-center gap-3">
               <span>
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21h18M4 17l4-8m4 8l4-8" />
@@ -25,7 +25,7 @@ const ServicesSection = () => (
           </div>
           {/* Digital Anganwadi */}
           <div className="bg-white rounded-2xl shadow-md p-3 sm:p-6 w-full border-l-4 border-orange-400 hover:shadow-xl hover:-translate-y-1 transition" data-aos="fade-up" data-aos-delay="150">
-            <h5 className="text-base sm:text-lg md:text-xl font-medium mb-3 flex items-center gap-3">
+            <h5 className="text-base sm:text-lg md:text-xl font-bold mb-3 flex items-center gap-3">
               <span>
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <circle cx="12" cy="8" r="4" />
@@ -38,7 +38,7 @@ const ServicesSection = () => (
           </div>
           {/* Digital School */}
           <div className="bg-white rounded-2xl shadow-md p-3 sm:p-6 w-full border-l-4 border-orange-400 hover:shadow-xl hover:-translate-y-1 transition" data-aos="fade-up" data-aos-delay="200">
-            <h5 className="text-base sm:text-lg md:text-xl font-medium mb-3 flex items-center gap-3">
+            <h5 className="text-base sm:text-lg md:text-xl font-bold mb-3 flex items-center gap-3">
               <span>
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path d="M12 3L2 9l10 6 10-6-10-6z" />
@@ -53,7 +53,7 @@ const ServicesSection = () => (
         <div className="space-y-4 sm:space-y-6 w-full">
           {/* Digital Grampanchayat */}
           <div className="bg-white rounded-2xl shadow-md p-3 sm:p-6 w-full border-l-4 border-orange-400 hover:shadow-xl hover:-translate-y-1 transition" data-aos="fade-up" data-aos-delay="250">
-            <h5 className="text-base sm:text-lg md:text-xl font-medium mb-3 flex items-center gap-3">
+            <h5 className="text-base sm:text-lg md:text-xl font-bold mb-3 flex items-center gap-3">
               <span>
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <rect x="4" y="8" width="16" height="12" rx="2" />
@@ -66,7 +66,7 @@ const ServicesSection = () => (
           </div>
           {/* CCTV */}
           <div className="bg-white rounded-2xl shadow-md p-3 sm:p-6 w-full border-l-4 border-orange-400 hover:shadow-xl hover:-translate-y-1 transition" data-aos="fade-up" data-aos-delay="300">
-            <h5 className="text-base sm:text-lg md:text-xl font-medium mb-3 flex items-center gap-3">
+            <h5 className="text-base sm:text-lg md:text-xl font-bold mb-3 flex items-center gap-3">
               <span>
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <rect x="3" y="7" width="18" height="10" rx="2" />
@@ -79,7 +79,7 @@ const ServicesSection = () => (
           </div>
           {/* Aqua RO */}
           <div className="bg-white rounded-2xl shadow-md p-3 sm:p-6 w-full border-l-4 border-orange-400 hover:shadow-xl hover:-translate-y-1 transition" data-aos="fade-up" data-aos-delay="350">
-            <h5 className="text-base sm:text-lg md:text-xl font-medium mb-3 flex items-center gap-3">
+            <h5 className="text-base sm:text-lg md:text-xl font-bold mb-3 flex items-center gap-3">
               <span>
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path d="M12 2C12 2 7 8 7 12a5 5 0 0010 0c0-4-5-10-5-10z" />

@@ -13,7 +13,7 @@ const CertificatesSection = () => (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4 md:px-0">
       {/* Card 1 */}
       <div
-  className="bg-white rounded-2xl shadow p-6 w-full border border-orange-600 transition-all duration-300 hover:shadow-md hover:-translate-x-1"
+  className="bg-white rounded-2xl shadow p-5 md:p-6 w-full border border-orange-600 transition-all duration-300 hover:shadow-md hover:-translate-x-1"
 
       >
         <h4 className="text-base font-semibold mb-2 flex items-center gap-2">
@@ -25,7 +25,7 @@ const CertificatesSection = () => (
           </span>
           नोकरी व्यवसायासाठी नाहरकत स्वयंघोषणापत्र
         </h4>
-        <p className="text-lg leading-relaxed">
+        <p className="text-sm leading-relaxed">
           नोकरी किंवा व्यवसायासाठी आवश्यक प्रमाणपत्र.
         </p>
       </div>
@@ -45,7 +45,7 @@ const CertificatesSection = () => (
           </span>
           बेरोजगार असल्याबाबतचे स्वयंघोषणापत्र
         </h4>
-        <p className="text-lg leading-relaxed">
+        <p className="text-sm leading-relaxed">
           बेरोजगार असल्याचे प्रमाणित करणारे अधिकृत पत्र.
         </p>
       </div>
@@ -64,7 +64,7 @@ const CertificatesSection = () => (
           </span>
           रहिवासी स्वयंघोषणापत्र
         </h4>
-        <p className="text-lg leading-relaxed">
+        <p className="text-sm leading-relaxed">
           गावातील रहिवासाचा पुरावा म्हणून वापरले जाते.
         </p>
       </div>
@@ -84,7 +84,7 @@ const CertificatesSection = () => (
           </span>
           वयाबाबत स्वयंघोषणापत्र
         </h4>
-        <p className="text-lg leading-relaxed">
+        <p className="text-sm leading-relaxed">
           कायदेशीर वय प्रमाणित करण्यासाठी आवश्यक.
         </p>
       </div>
@@ -102,7 +102,7 @@ const CertificatesSection = () => (
           </span>
           वीज जोडणीसाठी नाहरकत स्वंयघोषणापत्र
         </h4>
-        <p className="text-lg leading-relaxed">
+        <p className="text-sm leading-relaxed">
           वीज जोडणी घेण्यासाठी आवश्यक प्रमाणपत्र.
         </p>
       </div>
@@ -120,7 +120,7 @@ const CertificatesSection = () => (
           </span>
           योजनेचा लाभ न घेतल्याबाबत स्वयंघोषणापत्र
         </h4>
-        <p className="text-lg leading-relaxed">
+        <p className="text-sm leading-relaxed">
           सरकारी योजनेचा लाभ न घेतल्याचे प्रमाणपत्र.
         </p>
       </div>
