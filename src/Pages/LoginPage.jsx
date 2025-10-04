@@ -53,7 +53,7 @@ export default function LoginCard() {
             className="absolute inset-0 w-full h-full object-cover"
           />
           <h1 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-2/11 text-2xl md:text-4xl font-extrabold text-white drop-shadow-lg font-serif text-center">
-            ग्रामपंचायत गोमेवाडी
+            ग्रामपंचायत तगरखेडा
           </h1>
         </div>
 

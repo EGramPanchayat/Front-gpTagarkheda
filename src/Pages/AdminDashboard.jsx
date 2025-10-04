@@ -244,7 +244,7 @@ export default function AdminDashboard() {
           <div className="flex items-center gap-3">
             <img src="/images/satyamev.jpg" alt="Logo" className="h-10 w-10 rounded-full object-cover border-2 border-white shadow" />
             <h1 className="text-lg md:text-xl font-bold tracking-wide whitespace-nowrap">
-              ग्रामपंचायत गोमेवाडी
+              ग्रामपंचायत तगरखेडा 
             </h1>
           </div>
           <div className="relative w-full">
