@@ -30,11 +30,11 @@ const PlacesSection = () => (
           <p className="text-justify">तेरणा नदीमुळे गावाच्या सभोवतालचे नैसर्गिक सौंदर्य अधिक खुलून दिसते. नदीकाठावर हिरवाई पसरली असून पाणीपुरवठ्याचा मुख्य स्रोत म्हणून तेरणा नदीची महत्त्वाची भूमिका आहे. शेतकऱ्यांसाठी सिंचनाची सुविधा उपलब्ध होऊन शेती उत्पादकतेत वाढ झाली आहे.</p>
         </div>
        
-        {/* <div className="bg-white rounded-xl shadow-lg p-4 fade-in flex flex-col items-center hover:shadow-2xl hover:-translate-y-1 transition">
-          <img src="https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?w=400&q=80" alt="जलसंधारण प्रकल्प" className="w-full h-48 object-cover rounded-xl mb-4" />
-          <h5 className="text-lg font-bold mb-2 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 2L12 22"/><path d="M6 12L12 2L18 12"/></svg> जलसंधारण प्रकल्प</h5>
-          <p className="text-justify">पाणलोट क्षेत्राचा विकास आणि जलसंधारणामुळे परिसरात नैसर्गिक सौंदर्य खुलून दिसते. गावात बारव, पाणीसाठवण टाकी, सार्वजनिक विहिरी व शेततळी यासारख्या सुविधा उपलब्ध आहेत. तसेच, शासनाची अ‍ॅक्वा आरओ शुद्ध पाणी प्रकल्प योजना गावातील पाण्याची गुणवत्ता सुधारण्यासाठी कार्यरत आहे.</p>
-        </div> */}
+        <div className="bg-white rounded-xl shadow-lg p-4 fade-in flex flex-col items-center hover:shadow-2xl hover:-translate-y-1 transition">
+          <img src="images/shala1.jpg" alt="शाळा " className="w-full h-48 object-cover rounded-xl mb-4" />
+          <h5 className="text-lg font-bold mb-2 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 2L12 22"/><path d="M6 12L12 2L18 12"/></svg> जिल्हा परिषद शाळा </h5>
+          <p className="text-justify">“सुंदर जिल्हा परिषद शाळा” हा केवळ सौंदर्याचा नाही,तर स्वच्छता, शिक्षण आणि समाजसहभागाचा आदर्श उपक्रम आहे. यातून ग्रामीण भागातील शिक्षणव्यवस्थेला नवे रूप मिळत आहे आणि विद्यार्थ्यांसाठी आनंदी, प्रेरणादायी शिक्षण वातावरण निर्माण होत आहे</p>
+        </div>
 
        
 
