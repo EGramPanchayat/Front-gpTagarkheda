@@ -3,12 +3,15 @@ import ExecutiveBoard from "../Components/ExecutiveBoard";
 import Navbar from "../Components/Navbar";
 import NewsSection from "../Components/NewsSection";
 import axioesInstance from "../utils/axioesInstance";
+import DevelopmentSlideshow from "../Components/DevelopmentSection";
 
 import PlacesSection from "../Components/PlacesSection";
 import ContactSection from "../Components/ContactSection";
 import FooterSection from "../Components/FooterSection";
 import CertificatesSection from "../Components/CertificatesSection";
+import DakhalaMagani from "../Components/DakhalaMagani";
 import ServicesSection from "../Components/ServicesSection";
+import TaxSection from "../Components/TaxSection";
 
 // Executive members data for cards
 const executiveMembers = [
@@ -33,96 +36,8 @@ const stats = [
 
 
 
-function useDevelopmentWorks() {
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  useEffect(() => {
-    axioesInstance.get("/devworks")
-      .then((res) => {
-   
-        setLoading(false);
-        return res.data;
-      })
-      .then((data) => {
-        setItems(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-      });
-  }, []);
-  return { items, loading, error };
-}
+// Development slideshow moved to `front/src/Components/DevelopmentSection.jsx`
 
-
-function DevelopmentSlideshow() {
-  const { items: developmentItems, loading, error } = useDevelopmentWorks();
-  const [current, setCurrent] = useState(0);
-
-  useEffect(() => {
-    if (!loading && developmentItems.length > 0) {
-      const timer = setTimeout(() => {
-        setCurrent((prev) => (prev + 1) % developmentItems.length);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [current, loading, developmentItems.length]);
-
-  const goPrev = () =>
-    setCurrent((prev) => (prev - 1 + developmentItems.length) % developmentItems.length);
-  const goNext = () =>
-    setCurrent((prev) => (prev + 1) % developmentItems.length);
-
-  if (loading) return <div className="w-full text-center py-10">विकास कामे लोड होत आहेत...</div>;
-  if (error) return <div className="w-full text-center py-10 ">विकास कामे उपलब्ध नाहीत.</div>;
-  if (!developmentItems.length) return <div className="w-full text-center py-10">विकास कामे उपलब्ध नाहीत.</div>;
-
-  const item = developmentItems[current];
-
-  return (
-    <div className="flex justify-center items-center w-full flex-grow">
-     
-      <div className="w-full sm:w-[500px] md:w-[750px] lg:w-[900px] h-[380px] sm:h-[420px] flex flex-col shadow-lg rounded-xl overflow-hidden">
-
-        {/* Image Section */}
-        <div className="h-[180px] sm:h-[220px] w-full flex justify-center items-center overflow-hidden bg-gray-100">
-          <img
-            src={item.image.url}
-            alt={item.title}
-            className="h-full w-full object-cover"
-          />
-        </div>
-
-        {/* Info Section */}
-        <div className="w-full flex flex-col justify-between items-center bg-white px-3 py-3 h-[170px] sm:h-[180px]">
-          <div className="flex flex-col items-center text-center w-full px-2">
-            <h5 className="text-base sm:text-lg font-bold mb-1 mt-1 break-words line-clamp-2">
-              {item.title}
-            </h5>
-            <p className="text-xs sm:text-sm text-gray-700 break-words line-clamp-3">
-              {item.description}
-            </p>
-          </div>
-
-          {/* Dots */}
-          <div className="flex gap-2 mt-2">
-            {developmentItems.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => setCurrent(idx)}
-                className={`w-3 h-3 rounded-full transition-colors duration-300 ${
-                  idx === current ? "bg-green-600" : "bg-gray-300"
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 
 
@@ -197,7 +112,7 @@ const MainPage = () => {
       <h1 className="text-3xl md:text-[2.5rem] font-extrabold drop-shadow md:mb-5 text-green-700">
             ग्रामपंचायत तगरखेडा मध्ये स्वागत आहे
           </h1>
-          <p className="text-xl md:text-3xl mb-6 font-bold text-green-700">ता.निलंगा  जि.लातूर </p>
+          <p className="text-xl md:text-3xl mb-6 font-bold text-green-700">ता.निलंगा  जि.लातूर  </p>
         </div>
       </div>
     </section>
@@ -224,7 +139,7 @@ const MainPage = () => {
         ))}
       </div>
 
-      {/* About Section */}
+       {/* About Section */}
       <section id="about" className="px-5 md:px-0 py-10 w-full md:max-w-[81rem] flex flex-col items-center justify-center text-center">
         <div className="max-w-8xl w-full flex flex-col items-center">
          
@@ -279,115 +194,17 @@ const MainPage = () => {
 
 <ServicesSection  />
 
-<CertificatesSection />
+  <CertificatesSection />
+  <DakhalaMagani />
 
 
 
 
 
 
-  {/* Tax Section – Left Heading & Right Two Cards Horizontally */}
 
-<section className="w-full flex justify-center items-center bg-white pt-25 md:p-20 ">
-
-  <section
-    id="tax"
-    className=" py-8 px-5 mx-0 w-full bg-gradient-to-br from-green-100 to-blue-50 flex flex-col md:flex-row justify-center items-center md:mx-40 rounded-3xl"
-  >
-    <div className="max-w-6xl w-full flex flex-col  md:flex-row justify-between items-center gap-6  md:gap-10 py-5 sm:px-4">
-      {/* Left: Heading only */}
-      <div className="w-full md:w-2/6 flex items-center justify-center sm:py-0 mb-6 md:mb-0  md:h-full">
-        <h2 className="text-3xl md:text-[2.5rem] font-bold text-green-700 relative text-center w-full">
-          कर भरणा
-          <span className="block w-24 h-1 bg-orange-400 rounded absolute left-1/2 -translate-x-1/2 -bottom-3"></span>
-        </h2>
-      </div>
-
-      {/* Right: Cards arranged vertically on mobile, horizontally on desktop */}
-      <div className="w-full md:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-        {/* पाणीपट्टी */}
-        <div className="bg-white rounded-2xl shadow-lg flex flex-col items-center p-5 sm:p-8 min-h-[320px] w-full
-                        hover:shadow-2xl hover:-translate-y-1 transition">
-          <img
-            src="/images/water-supply.png"
-            alt="पाणीपट्टी"
-            className="w-full h-40 sm:h-48 object-cover rounded mb-2"
-          />
-          <h5 className="text-lg sm:text-xl font-bold mt-2 mb-2 flex items-center gap-2">
-            <span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-blue-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path d="M12 2C12 2 7 8 7 12a5 5 0 0010 0c0-4-5-10-5-10z" />
-              </svg>
-            </span>
-            पाणीपट्टी
-          </h5>
-          <p className="mb-3 text-base text-center">घरगुती व शेती पाणीपट्टी ऑनलाइन भरा.</p>
-          <button
-            className="bg-green-600 text-white px-6 py-2 rounded-lg w-full max-w-xs mt-auto hover:bg-green-700 transition text-base font-semibold"
-            onClick={() => setShowQRModal('panipatti')}
-          >
-            भरा
-          </button>
-        </div>
-
-        {/* मालमत्ता कर */}
-        <div className="bg-white rounded-2xl shadow-lg flex flex-col items-center p-5 sm:p-8 min-h-[320px] w-full
-                        hover:shadow-2xl hover:-translate-y-1 transition">
-          <img
-            src="/images/home.jpeg"
-            alt="मालमत्ता कर"
-            className="w-full h-40 sm:h-48 object-cover rounded mb-2"
-          />
-          <h5 className="text-lg sm:text-xl font-bold mt-2 mb-2 flex items-center gap-2">
-            <span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-green-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path d="M3 12l9-9 9 9" />
-                <rect x="6" y="12" width="12" height="8" rx="2" />
-              </svg>
-            </span>
-            मालमत्ता कर
-          </h5>
-          <p className="mb-3 text-base text-center">घर व शेतजमिनीसाठी मालमत्ता कर भरा.</p>
-          <button
-            className="bg-green-600 text-white px-6 py-2 rounded-lg w-full max-w-xs mt-auto hover:bg-green-700 transition text-base font-semibold"
-            onClick={() => setShowQRModal('gharpatti')}
-          >
-            भरा
-          </button>
-        </div>
-      </div>
-
-    </div>
-    {/* QR Code Modal */}
-    {showQRModal && (
-      <div className="fixed inset-0 bg-white/5 backdrop-blur-sm flex items-center justify-center z-[200]">
-        <div className="bg-white rounded-xl shadow-lg p-10 flex flex-col items-center relative min-w-[20rem] max-w-xs">
-          <button className="absolute top-2 right-2 text-xl text-gray-600 hover:text-red-500" onClick={()=>setShowQRModal("")}>×</button>
-          <h4  className="text-md font-bold mb-2">{showQRModal === 'panipatti' ? 'Panipatti QR Code' : 'Gharpatti QR Code'}</h4>
-          <img
-            src={showQRModal === 'panipatti'
-              ? (panipattiQR ? panipattiQR : "/images/noQR.jpg")
-              : (gharPattiQR ? gharPattiQR : "/images/noQR.jpg")}
-            alt="QR Code"
-            className="max-w-[90%] object-contain"
-          />
-        </div>
-      </div>
-    )}
-  </section>
-</section>
+    {/* Tax Section as Component */}
+    <TaxSection setShowQRModal={setShowQRModal} panipattiQR={panipattiQR} gharPattiQR={gharPattiQR} />
 
 
 
