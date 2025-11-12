@@ -67,13 +67,7 @@ const FooterSection = () => (
                 </svg>
                 जिल्हा परिषद लातूर
               </a>
-              <a href="https://mahapanchayats.in" target="_blank" className="text-white hover:underline flex items-center gap-1">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path d="M18 13v6a2 2 0 01-2 2H8a2 2 0 01-2-2v-6"/>
-                  <path d="M15 10l5-5m0 0l-5-5m5 5H9"/>
-                </svg>
-                MahaPanchyats.in
-              </a>
+          
             </div>
           </div>
         </div>
