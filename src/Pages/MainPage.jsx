@@ -13,6 +13,15 @@ import DakhalaMagani from "../Components/DakhalaMagani";
 import ServicesSection from "../Components/ServicesSection";
 import TaxSection from "../Components/TaxSection";
 
+
+import SamajSudharak from "../Components/SamajSudharak";
+import GovernmentOfficials from "../Components/GovernmentOfficials";
+import SloganTicker from "../Components/SloganTicker";
+import AamchyaSeva from "../Components/ourServices";
+import EmergencyContact from "../Components/EmergencyContact";
+
+
+
 // Executive members data for cards
 const executiveMembers = [
   { name: "श्री. विकास कचरू शेटे", phone: "+91 9876543210", img: "https://randomuser.me/api/portraits/men/45.jpg" },
@@ -117,6 +126,9 @@ const MainPage = () => {
       </div>
     </section>
 
+    <SloganTicker />
+
+
     <div className="bottom-village-content flex flex-col items-center w-full px-1 md:px-0 lg:px-15">
       {/* Stats Cards */}
   <div className="flex flex-wrap justify-center px-2 gap-4 sm:gap-8 mt-8 mb-8 w-full">
@@ -172,7 +184,7 @@ const MainPage = () => {
 
       </div>
 
-
+<SamajSudharak />
     
 <NewsSection />
 
@@ -191,13 +203,13 @@ const MainPage = () => {
     
 
     {/* Services Section */}
-
 <ServicesSection  />
 
   <CertificatesSection />
+
+      <AamchyaSeva/>
+  <EmergencyContact/>
   <DakhalaMagani />
-
-
 
 
 
@@ -210,7 +222,8 @@ const MainPage = () => {
 
 
 
-
+ {/* Government Officials Section */}
+      <GovernmentOfficials />
       {/* कार्यकारी मंडळ Section  k*/}
       <ExecutiveBoard />
 
