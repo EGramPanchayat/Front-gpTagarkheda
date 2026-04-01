@@ -17,8 +17,8 @@ const GovernmentOfficials = () => {
     {
       id: 3,
       name: "माननीय उपमुख्यमंत्री",
-      subtitle: "श्री. अजित पवार",
-      image: "/people/ajitPawar.jpeg",
+      subtitle: "श्रीमती सुनेत्रा अजित पवार",
+      image: "/people/SUNETRA-PAWAR.jpg",
     },
     {
       id: 4,
