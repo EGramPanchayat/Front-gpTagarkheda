@@ -9,7 +9,7 @@ export default function RequireAuth({ children }) {
   const [allowed, setAllowed] = useState(null);
 
   useEffect(() => {
-    axioesInstance.get("/check")
+    axioesInstance.get("/admin/check")
       .then(res => setAllowed(res.data.ok))
       .catch(() => setAllowed(false));
   }, []);

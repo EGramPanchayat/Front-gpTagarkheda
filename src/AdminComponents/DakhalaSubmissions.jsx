@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../utils/axioesInstance';
 
-// ✅ Modal Component
+// ? Modal Component
 function DakhalaModal({ open, onClose, data, onDelete, deleting }) {
   if (!open || !data) return null;
   const safe = (v) => (v === undefined || v === null ? '' : v);
@@ -19,43 +19,43 @@ function DakhalaModal({ open, onClose, data, onDelete, deleting }) {
 
   const renderTypeFields = () => {
     switch (type) {
-      case 'जन्म नोंद':
+      case '???? ????':
         return (
           <>
-            <p><span className="font-semibold">बाळाचे नाव:</span> {safe(data.childName)}</p>
-            <p><span className="font-semibold">जन्म तारीख:</span> {formatDate(data.dob)}</p>
+            <p><span className="font-semibold">?????? ???:</span> {safe(data.childName)}</p>
+            <p><span className="font-semibold">???? ?????:</span> {formatDate(data.dob)}</p>
           </>
         );
-      case 'मृत्यू नोंद':
+      case '?????? ????':
         return (
           <>
-            <p><span className="font-semibold">मृत व्यक्तीचे नाव:</span> {safe(data.deathName)}</p>
-            <p><span className="font-semibold">मृत्यूची तारीख:</span> {formatDate(data.deathDate)}</p>
+            <p><span className="font-semibold">??? ????????? ???:</span> {safe(data.deathName)}</p>
+            <p><span className="font-semibold">???????? ?????:</span> {formatDate(data.deathDate)}</p>
           </>
         );
-      case 'विवाह नोंदणी दाखला':
+      case '????? ?????? ?????':
         return (
           <>
-            <p><span className="font-semibold">दांपत्याचे नाव:</span> {safe(data.coupleName)}</p>
-            <p><span className="font-semibold">विवाह वर्ष:</span> {safe(data.marriageYear)}</p>
+            <p><span className="font-semibold">?????????? ???:</span> {safe(data.coupleName)}</p>
+            <p><span className="font-semibold">????? ????:</span> {safe(data.marriageYear)}</p>
           </>
         );
-      case '८ अ उतारा':
+      case '? ? ?????':
         return (
           <>
-            <p><span className="font-semibold">मिळकत नंबर:</span> {safe(data.propertyNo)}</p>
-            <p><span className="font-semibold">या व्यक्तीच्या नावाने दाखला पाहिजे आहे:</span> {safe(data.certificateName)}</p>
+            <p><span className="font-semibold">????? ????:</span> {safe(data.propertyNo)}</p>
+            <p><span className="font-semibold">?? ??????????? ?????? ????? ?????? ???:</span> {safe(data.certificateName)}</p>
           </>
         );
-      case 'निराधार असल्याचा दाखला मागणी':
-        return <p><span className="font-semibold">निराधाराचे नाव:</span> {safe(data.niradharName)}</p>;
-      case 'दारिद्र्य रेषेखाली असल्याचा दाखला':
-      case 'ग्रामपंचायत येणे बाकी दाखला':
+      case '??????? ???????? ????? ?????':
+        return <p><span className="font-semibold">?????????? ???:</span> {safe(data.niradharName)}</p>;
+      case '????????? ???????? ???????? ?????':
+      case '??????????? ???? ???? ?????':
         return (
-          <p><span className="font-semibold">या व्यक्तीच्या नावाने दाखला पाहिजे आहे:</span> {safe(data.certificateName)}</p>
+          <p><span className="font-semibold">?? ??????????? ?????? ????? ?????? ???:</span> {safe(data.certificateName)}</p>
         );
       default:
-        return <p>माहिती उपलब्ध नाही.</p>;
+        return <p>?????? ?????? ????.</p>;
     }
   };
 
@@ -67,7 +67,7 @@ function DakhalaModal({ open, onClose, data, onDelete, deleting }) {
           onClick={onClose}
           className="absolute top-3 right-3 text-gray-600 hover:text-red-600 font-bold text-xl"
         >
-          ×
+          �
         </button>
 
         {/* Header */}
@@ -78,14 +78,14 @@ function DakhalaModal({ open, onClose, data, onDelete, deleting }) {
 
         {/* Modal content */}
         <div className="space-y-2 text-gray-700 text-[15px] leading-relaxed break-words whitespace-normal">
-          <p><span className="font-semibold">अर्जदाराचे नाव:</span> {safe(data.forName)}</p>
+          <p><span className="font-semibold">?????????? ???:</span> {safe(data.forName)}</p>
           <p><span className="font-semibold">WhatsApp No:</span> {safe(data.whatsappNo)}</p>
-          <p><span className="font-semibold">ईमेल:</span> {safe(data.email)}</p>
+          <p><span className="font-semibold">????:</span> {safe(data.email)}</p>
 
           {renderTypeFields()}
 
           {/* Image Section */}
-          {type !== 'दारिद्र्य रेषेखाली असल्याचा दाखला' && type !== 'नीराधार असल्याचा दाखला' && (
+          {type !== '????????? ???????? ???????? ?????' && type !== '??????? ???????? ?????' && (
             <div className="mt-3">
               <p className="font-semibold mb-1">Payment Screenshot:</p>
               <div className="flex justify-center">
@@ -138,7 +138,7 @@ function DakhalaModal({ open, onClose, data, onDelete, deleting }) {
   );
 }
 
-// ✅ Main Component
+// ? Main Component
 export default function DakhalaSubmissions() {
   const [subs, setSubs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -149,7 +149,7 @@ export default function DakhalaSubmissions() {
   const fetchSubs = async () => {
     setLoading(true);
     try {
-      const { data } = await axiosInstance.get('/dakhala');
+      const { data } = await axiosInstance.get('/admin/submissions');
       setSubs(data);
     } catch (err) {
       console.error(err);
@@ -165,7 +165,7 @@ export default function DakhalaSubmissions() {
   const handleDelete = async (id) => {
     setDeleting(true);
     try {
-      await axiosInstance.delete(`/dakhala/${id}`);
+      await axiosInstance.delete(`/admin/submissions/${id}`);
       setSubs((s) => s.filter((x) => x._id !== id));
       setModalOpen(false);
       setModalData(null);
@@ -190,7 +190,7 @@ export default function DakhalaSubmissions() {
   return (
     <div className="w-full bg-white py-6 px-4 rounded-3xl shadow-2xl">
       <h1 className="text-2xl font-bold text-green-700 mb-4 border-b pb-2">
-        दाखले मागणी अर्ज
+        ????? ????? ????
       </h1>
 
       {validSubs.length === 0 ? (
@@ -217,7 +217,7 @@ export default function DakhalaSubmissions() {
                   {sub.type || 'Unknown Type'}
                 </p>
               </div>
-              <span className="text-green-700 font-semibold text-sm">View →</span>
+              <span className="text-green-700 font-semibold text-sm">View ?</span>
             </div>
           ))}
         </div>
