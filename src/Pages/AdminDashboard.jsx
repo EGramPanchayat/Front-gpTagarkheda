@@ -12,14 +12,6 @@ import ExecutiveBoardAdmin from "../AdminComponents/ExecutiveBoardAdmin";
 import { Link } from "react-scroll";
 import NoticeUploadModal from "../AdminComponents/NoticeUploadModal";
 
-
-import SamajSudharak from "../Components/SamajSudharak";
-import GovernmentOfficials from "../Components/GovernmentOfficials";
-import SloganTicker from "../Components/SloganTicker";
-import AamchyaSeva from "../Components/ourServices";
-import EmergencyContact from "../Components/EmergencyContact";
-
-
 // ---------- Helpers ----------
 const newMember = (data = {}) => ({
   _id: data._id || uuidv4(),
@@ -53,7 +45,7 @@ const Card = memo(function Card({ title, data, onChange, allowRemove, onRemove }
         </div>
       </div>
       <input
-        placeholder="???"
+        placeholder="नाव"
         value={data.name}
         onChange={e => onChange("name", e.target.value)}
         className="border border-green-600 p-2 rounded w-full mb-2 text-left"
@@ -62,7 +54,7 @@ const Card = memo(function Card({ title, data, onChange, allowRemove, onRemove }
         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 select-none">+91</span>
         <input
           type="tel"
-          placeholder="??????"
+          placeholder="मोबाईल"
           value={data.mobile}
           onChange={e => onChange("mobile", e.target.value.replace(/[^\d]/g, ""))}
           className="border border-green-600 p-2 pl-12 rounded w-full text-left"
@@ -84,7 +76,7 @@ const Card = memo(function Card({ title, data, onChange, allowRemove, onRemove }
           onClick={onRemove}
           className="mt-3 bg-red-500 text-white px-3 py-1 rounded shadow"
         >
-          ????
+          हटवा
         </button>
       )}
     </div>
@@ -120,13 +112,13 @@ export default function AdminDashboard() {
         setMembers((data.members || []).map(m => newMember(m)));
 
         const defaultRoles = [
-          "?????",
-          "?????????",
-          "???? ???????",
-          "???? ??????",
-          "?????????? ????????",
-          "?????",
-          "?????",
+          "तलाठी",
+          "ग्रामसेवक",
+          "कृषी अधिकारी",
+          "डेटा ऑपरेटर",
+          "पाणीपुरवठा कर्मचारी",
+          "लिपिक",
+          "शिपाई",
         ];
         const existing = data.staff?.officers || [];
         setOfficers(
@@ -138,7 +130,7 @@ export default function AdminDashboard() {
       } catch {
         setMembers([newMember()]);
         setOfficers(
-          ["?????", "?????????", "???? ???????", "???? ??????", "?????????? ????????", "?????", "?????"].map(r =>
+          ["तलाठी", "ग्रामसेवक", "कृषी अधिकारी", "डेटा ऑपरेटर", "पाणीपुरवठा कर्मचारी", "लिपिक", "शिपाई"].map(r =>
             newOfficer(r)
           )
         );
@@ -176,18 +168,18 @@ export default function AdminDashboard() {
 
   const validate = () => {
     const ten = /^\d{10}$/;
-    if (!sarpanch.name.trim()) return "??????? ??? ?????? ???";
-    if (!ten.test(sarpanch.mobile)) return "??????? ?????? 10 ??????? ?????";
-    if (!upsarpanch.name.trim()) return "????????? ??? ?????? ???";
-    if (!ten.test(upsarpanch.mobile)) return "????????? ?????? 10 ??????? ?????";
-    if (!members.length) return "????? 1 ????? ?????? ???";
+    if (!sarpanch.name.trim()) return "सरपंचचे नाव आवश्यक आहे";
+    if (!ten.test(sarpanch.mobile)) return "सरपंचचा मोबाईल 10 अंकांचा असावा";
+    if (!upsarpanch.name.trim()) return "उपसरपंचचे नाव आवश्यक आहे";
+    if (!ten.test(upsarpanch.mobile)) return "उपसरपंचचा मोबाईल 10 अंकांचा असावा";
+    if (!members.length) return "किमान 1 सदस्य आवश्यक आहे";
     for (let i = 0; i < members.length; i++) {
-      if (!members[i].name.trim()) return `????? ${i + 1} ?? ??? ?????? ???`;
-      if (!ten.test(members[i].mobile)) return `????? ${i + 1} ?? ?????? 10 ??????? ?????`;
+      if (!members[i].name.trim()) return `सदस्य ${i + 1} चे नाव आवश्यक आहे`;
+      if (!ten.test(members[i].mobile)) return `सदस्य ${i + 1} चा मोबाईल 10 अंकांचा असावा`;
     }
     for (const o of officers) {
-      if (!o.name.trim()) return `${o.role} ?? ??? ?????? ???`;
-      if (!ten.test(o.mobile)) return `${o.role} ?? ?????? 10 ??????? ?????`;
+      if (!o.name.trim()) return `${o.role} चे नाव आवश्यक आहे`;
+      if (!ten.test(o.mobile)) return `${o.role} चा मोबाईल 10 अंकांचा असावा`;
     }
     return null;
   };
@@ -225,9 +217,9 @@ export default function AdminDashboard() {
       await axioesInstance.post("/admin/executive-board", fd, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      toast.success("??????????? ???????????? ??? ????!");
+      toast.success("कार्यकारिणी यशस्वीरित्या जतन झाली!");
     } catch (err) {
-      toast.error(`??????? ??????: ${err.message}`);
+      toast.error(`सर्व्हर त्रुटी: ${err.message}`);
     } finally {
       setSaving(false);
     }
@@ -251,10 +243,10 @@ export default function AdminDashboard() {
             />
             <div className="flex flex-col">
               <h1 className="text-lg md:text-xl font-bold tracking-wide whitespace-nowrap">
-                ??????????? ??????? 
+                ग्रामपंचायत तगरखेडा
               </h1>
-              <span className="text-sm md:text-base text-white/80">
-                ??. ??????  ??. ?????  
+              <span className="text-sm md:text-base text-white/80 whitespace-nowrap">
+                ता.निलंगा जि.लातूर
               </span>
             </div>
           </div>
@@ -292,25 +284,25 @@ export default function AdminDashboard() {
                   toggle.classList.remove("hidden");
                 }}
               >
-                �
+                ×
               </button>
               <div className="flex flex-col md:flex-row w-full items-start md:items-center justify-start md:justify-end gap-6 md:gap-8 mt-8 md:mt-0">
-                <Link to="news-section" smooth duration={500} onClick={() => { closeMobileMenu(); setQrModalOpen(false); }} className="cursor-pointer text-gray-300 hover:text-green-300">???????</Link>
+                <Link to="news-section" smooth duration={500} onClick={() => { closeMobileMenu(); setQrModalOpen(false); }} className="cursor-pointer text-gray-300 hover:text-green-300">बातम्या</Link>
                 <button
                   className="cursor-pointer text-gray-300 hover:text-green-300 text-base font-semibold bg-transparent border-none p-0 m-0"
                   onClick={() => { setNoticeModalOpen(true); closeMobileMenu(); }}
                   style={{ fontWeight: "inherit" }}
                 >
-                  ?????
+                  सूचना
                 </button>
-                <Link to="devworks-section" smooth duration={500} onClick={() => { closeMobileMenu(); setQrModalOpen(false); }} className="cursor-pointer text-gray-300 hover:text-green-300">????? ????</Link>
-                <Link to="exec-section" smooth duration={500} onClick={() => { closeMobileMenu(); setQrModalOpen(false); }} className="cursor-pointer text-gray-300 hover:text-green-300">???????????</Link>
+                <Link to="devworks-section" smooth duration={500} onClick={() => { closeMobileMenu(); setQrModalOpen(false); }} className="cursor-pointer text-gray-300 hover:text-green-300">विकास कामे</Link>
+                <Link to="exec-section" smooth duration={500} onClick={() => { closeMobileMenu(); setQrModalOpen(false); }} className="cursor-pointer text-gray-300 hover:text-green-300">कार्यकारिणी</Link>
                 <button
                   className="cursor-pointer text-gray-300 hover:text-green-300 text-base font-semibold bg-transparent border-none p-0 m-0"
                   onClick={() => { setQrModalOpen(true); closeMobileMenu(); }}
                   style={{ fontWeight: "inherit" }}
                 >
-                  ??
+                  कर
                 </button>
                 <button
                   onClick={() => {

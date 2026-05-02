@@ -36,7 +36,7 @@ const Card = memo(function Card({ title, data, onChange, allowRemove, onRemove }
         </div>
       </div>
       <input
-        placeholder="???"
+        placeholder="नाव"
         value={data.name}
         onChange={e => onChange("name", e.target.value)}
         className="border border-green-600 p-2 rounded w-full mb-2 text-left"
@@ -45,7 +45,7 @@ const Card = memo(function Card({ title, data, onChange, allowRemove, onRemove }
         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 select-none">+91</span>
         <input
           type="tel"
-          placeholder="??????"
+          placeholder="मोबाईल"
           value={data.mobile}
           onChange={e => onChange("mobile", e.target.value.replace(/[^\d]/g, ""))}
           className="border border-green-600 p-2 pl-12 rounded w-full text-left"
@@ -67,7 +67,7 @@ const Card = memo(function Card({ title, data, onChange, allowRemove, onRemove }
           onClick={onRemove}
           className="mt-3 bg-red-500 text-white px-3 py-1 rounded shadow"
         >
-          ????
+          हटवा
         </button>
       )}
     </div>
@@ -101,13 +101,13 @@ export default function ExecutiveBoardAdmin() {
   setMembers((data.members || []).map(m => newMember(m)));
 
         const defaultRoles = [
-          "????? ????? ???????",
-          "??????????? ???????",
-          "???? ???????",
-          "???? ??????",
-          "?????????? ????????",
-          "?????",
-          "?????",
+          "ग्राम महसूल अधिकारी",
+          "ग्रामपंचायत अधिकारी",
+          "कृषी अधिकारी",
+          "डेटा ऑपरेटर",
+          "पाणीपुरवठा कर्मचारी",
+          "लिपिक",
+          "शिपाई",
         ];
   const existing = data.staff?.officers || [];
         setOfficers(
@@ -121,7 +121,7 @@ export default function ExecutiveBoardAdmin() {
       } catch {
         setMembers([newMember()]);
         setOfficers(
-          ["????? ????? ???????", "??????????? ???????", "???? ???????", "???? ??????", "?????????? ????????", "?????", "?????"].map(r =>
+          ["ग्राम महसूल अधिकारी", "ग्रामपंचायत अधिकारी", "कृषी अधिकारी", "डेटा ऑपरेटर", "पाणीपुरवठा कर्मचारी", "लिपिक", "शिपाई"].map(r =>
             newOfficer(r)
           )
         );
@@ -145,18 +145,18 @@ export default function ExecutiveBoardAdmin() {
 
   const validate = () => {
     const ten = /^\d{10}$/;
-    if (!sarpanch.name.trim()) return "??????? ??? ?????? ???";
-    if (!ten.test(sarpanch.mobile)) return "??????? ?????? 10 ??????? ?????";
-    if (!upsarpanch.name.trim()) return "????????? ??? ?????? ???";
-    if (!ten.test(upsarpanch.mobile)) return "????????? ?????? 10 ??????? ?????";
-    if (!members.length) return "????? 1 ????? ?????? ???";
+    if (!sarpanch.name.trim()) return "सरपंचचे नाव आवश्यक आहे";
+    if (!ten.test(sarpanch.mobile)) return "सरपंचचा मोबाईल 10 अंकांचा असावा";
+    if (!upsarpanch.name.trim()) return "उपसरपंचचे नाव आवश्यक आहे";
+    if (!ten.test(upsarpanch.mobile)) return "उपसरपंचचा मोबाईल 10 अंकांचा असावा";
+    if (!members.length) return "किमान 1 सदस्य आवश्यक आहे";
     for (let i = 0; i < members.length; i++) {
-      if (!members[i].name.trim()) return `????? ${i + 1} ?? ??? ?????? ???`;
-      if (!ten.test(members[i].mobile)) return `????? ${i + 1} ?? ?????? 10 ??????? ?????`;
+      if (!members[i].name.trim()) return `सदस्य ${i + 1} चे नाव आवश्यक आहे`;
+      if (!ten.test(members[i].mobile)) return `सदस्य ${i + 1} चा मोबाईल 10 अंकांचा असावा`;
     }
     for (const o of officers) {
-      if (!o.name.trim()) return `${o.role} ?? ??? ?????? ???`;
-      if (!ten.test(o.mobile)) return `${o.role} ?? ?????? 10 ??????? ?????`;
+      if (!o.name.trim()) return `${o.role} चे नाव आवश्यक आहे`;
+      if (!ten.test(o.mobile)) return `${o.role} चा मोबाईल 10 अंकांचा असावा`;
     }
     return null;
   };
@@ -194,9 +194,9 @@ export default function ExecutiveBoardAdmin() {
       await axioesInstance.post("/admin/executive-board", fd, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      toast.success("??????????? ???????????? ??? ????!");
+      toast.success("कार्यकारिणी यशस्वीरित्या जतन झाली!");
     } catch (err) {
-      toast.error(`??????? ??????: ${err.message}`);
+      toast.error(`सर्व्हर त्रुटी: ${err.message}`);
     } finally {
       setSaving(false);
     }
@@ -220,20 +220,20 @@ export default function ExecutiveBoardAdmin() {
 
   return (
     <form onSubmit={handleSubmit} className="bg-gray-50 p-10 rounded-2xl shadow-2xl space-y-12 border border-green-200">
-      <h2 className="text-2xl font-bold text-green-700 mb-4 border-b sm:pb-2 md:pb-4 text-center">??? ??????????? ??????????</h2>
+      <h2 className="text-2xl font-bold text-green-700 mb-4 border-b sm:pb-2 md:pb-4 text-center">गाव कार्यकारिणी व्यवस्थापन</h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        <Card title="?????" data={sarpanch} onChange={(k, v) => setSarpanch(s => ({ ...s, [k]: v }))} />
-        <Card title="???????" data={upsarpanch} onChange={(k, v) => setUpsarpanch(s => ({ ...s, [k]: v }))} />
+        <Card title="सरपंच" data={sarpanch} onChange={(k, v) => setSarpanch(s => ({ ...s, [k]: v }))} />
+        <Card title="उपसरपंच" data={upsarpanch} onChange={(k, v) => setUpsarpanch(s => ({ ...s, [k]: v }))} />
         {members.map(m => (
-          <Card key={m._id} title="?????" data={m} onChange={(k, v) => updateMember(m._id, k, v)} allowRemove={members.length > 1} onRemove={() => removeMember(m._id)} />
+          <Card key={m._id} title="सदस्य" data={m} onChange={(k, v) => updateMember(m._id, k, v)} allowRemove={members.length > 1} onRemove={() => removeMember(m._id)} />
         ))}
       </div>
       <div className="text-center mt-4">
-        <button type="button" onClick={addMember} className="bg-green-700 text-white px-4 py-2 rounded shadow">???? ????? ????</button>
+        <button type="button" onClick={addMember} className="bg-green-700 text-white px-4 py-2 rounded shadow">नवीन सदस्य जोडा</button>
       </div>
 
-      <h3 className="text-3xl font-bold mb-4 border-t pt-10 text-green-700 text-center">???????</h3>
+      <h3 className="text-3xl font-bold mb-4 border-t pt-10 text-green-700 text-center">अधिकारी</h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {officers.map(o => (
           <Card key={o._id} title={o.role} data={o} onChange={(k, v) => updateOfficer(o._id, k, v)} />
