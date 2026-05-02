@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from "react";
+﻿import React, { useState, useEffect, memo } from "react";
 import { v4 as uuidv4 } from "uuid";
 import axioesInstance from "../utils/axioesInstance";
 import { toast, ToastContainer } from "react-toastify";
@@ -245,7 +245,7 @@ export default function AdminDashboard() {
               <h1 className="text-lg md:text-xl font-bold tracking-wide whitespace-nowrap">
                 ग्रामपंचायत तगरखेडा
               </h1>
-              <span className="text-sm md:text-base text-white/80 whitespace-nowrap">
+              <span className="text-sm md:text-base text-white/80">
                 ता.निलंगा जि.लातूर
               </span>
             </div>
@@ -305,11 +305,15 @@ export default function AdminDashboard() {
                   कर
                 </button>
                 <button
-                  onClick={() => {
+                  onClick={async () => {
                     // close mobile menu and any open modals before logout
                     closeMobileMenu();
                     setQrModalOpen(false);
-                    localStorage.removeItem("adminToken");
+                    try {
+                      await axioesInstance.post("/admin/logout");
+                    } catch (e) {
+                      // ignore — redirect to login regardless
+                    }
                     window.location.href = "/login";
                   }}
                   className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded shadow font-bold transition"
